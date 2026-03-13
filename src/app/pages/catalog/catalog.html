@@ -2,12 +2,9 @@
     <div class="card">
         <div class="font-semibold text-xl">Catálogo</div>
 
-
-        <p-dataview [value]="products" layout='grid'>
+        <p-dataview [value]="(products$ | async) || []" layout='grid'>
 
             <ng-template #header>
-
-                <!-- <div class="font-semibold text-xl">Catálogo</div> -->
                 <div class="flex justify-end">
                     <p-select-button [(ngModel)]="grid">
                     </p-select-button>

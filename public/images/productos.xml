@@ -2,59 +2,32 @@
 <products>
   <product>
     <id>1</id>
-    <name>Laptop Pro 16</name>
+    <name>Prueba</name>
     <price>1200.50</price>
-    <imageUrl>assets/laptop.webp</imageUrl>
-    <category>Electrónica</category>
-    <description>Potente laptop para desarrollo y diseño gráfico.</description>
-    <inStock>true</inStock>
+    <image>lovebox-1.webp</image>
+    <category>Prueba</category>
+    <quantity>1</quantity>
+    <description>Desc.</description>
+    <inStock>INSTOCK</inStock>
   </product>
   <product>
     <id>2</id>
-    <name>Teclado Mecánico RGB</name>
-    <price>85.00</price>
-    <imageUrl>assets/mechanic_keyboard.webp</imageUrl>
-    <category>Periféricos</category>
-    <description>Interruptores brown y retroiluminación personalizada.</description>
-    <inStock>true</inStock>
+    <name>Prueba</name>
+    <price>1200.50</price>
+    <image>lovebox-1.webp</image>
+    <category>Prueba</category>
+    <quantity>1</quantity>
+    <description>Desc.</description>
+    <inStock>LOWSTOCK</inStock>
   </product>
   <product>
     <id>3</id>
-    <name>Monitor 4K UltraWide</name>
-    <price>450.00</price>
-    <imageUrl>/assets/monitor_144.webp</imageUrl>
-    <category>Monitores</category>
-    <description>Pantalla curva de 34 pulgadas ideal para productividad.</description>
-    <inStock>false</inStock>
-  </product>
-
-  <product>
-    <id>4</id>
-    <name>Audifonos</name>
-    <price>3330.00</price>
-    <imageUrl>https://m.media-amazon.com/images/I/61BliV-4N1L._AC_SY300_SX300_QL70_ML2_.jpg</imageUrl>
-    <category>Audio</category>
-    <description>Audífonos inalámbricos.</description>
-    <inStock>true</inStock>
-  </product>
-
-  <product>
-    <id>5</id>
-    <name>Mouse</name>
-    <price>2800.00</price>
-    <imageUrl>https://static0.xdaimages.com/wordpress/wp-content/uploads/2023/10/razer-pro-mini-click.png</imageUrl>
-    <category>Computación</category>
-    <description>Mouse synaptic sin ruido de clic</description>
-    <inStock>false</inStock>
-  </product>
-
-  <product>
-    <id>6</id>
-    <name>ESP32</name>
-    <price>150.00</price>
-    <imageUrl>https://encrypted-tbn2.gstatic.com/shopping?q=tbn:ANd9GcQeGsOFLIvStt2aPYrv4KsfP2oWHK4zCJM6aB6TLJDk5tREUzp64Br05y0QrhNgpGYVkakHEok79wwjfOuXzL2Zqaew11rW9StCIzRFfh61x94ae6IwbqQqrw</imageUrl>
-    <category>MICROCONTROLADORES</category>
-    <description>El mejor microcontrolador existente con procesador Xtensa de 32 bits</description>
-    <inStock>true</inStock>
+    <name>Prueba</name>
+    <price>1200.50</price>
+    <image>lovebox-1.webp</image>
+    <category>Prueba</category>
+    <quantity>1</quantity>
+    <description>Desc.</description>
+    <inStock>OUTOFSTOCK</inStock>
   </product>
 </products>

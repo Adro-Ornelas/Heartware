@@ -5,8 +5,11 @@ import { ButtonModule } from 'primeng/button';
 import { DataViewModule } from 'primeng/dataview';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TagModule } from 'primeng/tag';
-import { Product, ProductService } from '@/app/pages/service/product.service';
-import { Table, TableModule } from "primeng/table";
+// import { Product, ProductService } from '@/app/pages/service/product.service';
+import { Product } from '@/app/models/product.model';
+import { ProductService } from '@/app/services/products.service';
+import { Table, TableModule } from 'primeng/table';
+import { Observable } from 'rxjs';
 
 @Component({
     selector: 'app-catalog',
@@ -17,13 +20,38 @@ import { Table, TableModule } from "primeng/table";
     providers: [ProductService]
 })
 export class Catalog {
+    // products: Product[] = []; Versión vieja, necesita ser Observable para cargar correctamente
+    products$: Observable<Product[]>;
 
-    products: Product[] = [];
-
-    constructor(private productService: ProductService) {}
+    constructor(private productService: ProductService) {
+        this.products$ = this.productService.getProducts();
+    }
 
     ngOnInit() {
-        this.productService.getProductsSmall().then((data) => (this.products = data.slice(0, 6)));
+        // TESTING
+        // this.products = [
+        //     {
+        //         id: 1,
+        //         name: 'Prueba',
+        //         price: 1,
+        //         image: 'lovebox-1.webp',
+        //         category: 'Prueba',
+        //         quantity: 1,
+        //         description: 'Desc',
+        //         inventoryStatus: 'INSTOCK'
+        //     }
+        // ];
+
+        // this.productService.getProducts().subscribe({
+        //     next: (data) => {
+        //         this.products = data;
+        //         this.loading = false; // Data arrived, stop loading
+        //     },
+        //     error: (err) => {
+        //         console.error('Error cargando XML: ', err);
+        //         this.loading = false; // Stop loading even on error
+        //     }
+        // });
     }
 
     getSeverity(product: Product) {
