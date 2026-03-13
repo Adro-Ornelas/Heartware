@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { Documentation } from './documentation/documentation';
 import { Crud } from './crud/crud';
 import { Empty } from './empty/empty';
-
+ 
 import { Catalog } from './catalog/catalog';
 
 export default [
