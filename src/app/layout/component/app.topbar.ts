@@ -33,8 +33,21 @@ import { LayoutService } from '@/app/layout/service/layout.service';
 
 
             <div class="layout-topbar-menu hidden lg:block">
+                <div class="layout-topbar-menu-content">                    
+                    <button type="button" class="layout-topbar-action"
+                    routerLink="/pages/catalog">
+                        <i class="pi pi-home"></i>
+                        <span>Shopping-cart</span>
+                    </button>
+                </div>
+            </div>
+
+
+            <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
+                    
+                    <button type="button" class="layout-topbar-action"
+                    routerLink="/pages/shoppingcart">
                         <i class="pi pi-shopping-cart"></i>
                         <span>Shopping-cart</span>
                     </button>
@@ -43,7 +56,8 @@ import { LayoutService } from '@/app/layout/service/layout.service';
 
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
-                    <button type="button" class="layout-topbar-action">
+                    <button type="button" class="layout-topbar-action"
+                    routerLink="/pages/profile">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>
                     </button>

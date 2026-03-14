@@ -5,6 +5,8 @@ import { Component } from '@angular/core';
     selector: 'app-footer',
     template: `<div class="layout-footer">
         <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="text-primary font-bold hover:underline">Heartware</a>
+
+        <img src="images/favicon.webp" alt="Heartware logo" style="height: 40px;margin-left: 20px;" />
     </div>`
 })
 export class AppFooter {}
