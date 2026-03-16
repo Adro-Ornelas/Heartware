@@ -10,21 +10,33 @@ import { Product } from '@/app/models/product.model';
 import { ProductService } from '@/app/services/products.service';
 import { Table, TableModule } from 'primeng/table';
 import { Observable } from 'rxjs';
-
+import { ShoppingCartService } from '@/app/services/shoppingcart.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 @Component({
     selector: 'app-catalog',
     standalone: true,
-    imports: [CommonModule, DataViewModule, FormsModule, SelectButtonModule, TagModule, ButtonModule, TableModule],
+    imports: [CommonModule, DataViewModule, FormsModule, SelectButtonModule, TagModule, ButtonModule, TableModule, ToastModule],
     templateUrl: './catalog.html',
     styleUrls: ['./catalog.css'],
-    providers: [ProductService]
+    providers: [ProductService, MessageService]
 })
 export class Catalog {
     // products: Product[] = []; Versión vieja, necesita ser Observable para cargar correctamente
     products$: Observable<Product[]>;
 
-    constructor(private productService: ProductService) {
+    constructor(private productService: ProductService, private shoppingCartService: ShoppingCartService, private messageService: MessageService) {
         this.products$ = this.productService.getProducts();
+    }
+
+    add(product: Product){
+        this.shoppingCartService.add(product);
+        this.messageService.add({ 
+            severity: 'success', 
+            summary: '¡Agregado!', 
+            detail: `${product.name} se añadió al carrito`,
+            life: 2000 
+        });
     }
 
     ngOnInit() {

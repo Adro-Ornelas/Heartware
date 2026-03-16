@@ -1,3 +1,4 @@
+<p-toast></p-toast> <div class="flex flex-col"></div>
 <div class="flex flex-col">
     <div class="card">
         <div class="font-semibold text-xl">Catálogo</div>
@@ -38,9 +39,13 @@
                                 <div class="flex flex-col gap-6 mt-6">
                                     <span class="text-2xl font-semibold">$ {{ item.price }}</span>
                                     <div class="flex gap-2">
-                                        <p-button icon="pi pi-shopping-cart" label="Buy Now"
+                                        <p-button 
+                                            icon="pi pi-shopping-cart" 
+                                            label="Agregar al carrito"
                                             [disabled]="item.inventoryStatus === 'OUTOFSTOCK'"
-                                            class="flex-auto whitespace-nowrap" styleClass="w-full"></p-button>
+                                            (onClick)="add(item)"
+                                            class="flex-auto whitespace-nowrap" 
+                                            styleClass="w-full"></p-button>
                                         <p-button icon="pi pi-heart" styleClass="h-full" [outlined]="true"></p-button>
                                     </div>
                                 </div>

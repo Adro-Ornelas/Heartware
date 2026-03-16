@@ -1,0 +1,29 @@
+.text-primary {
+  color: var(--primary-color);
+}
+
+.bg-primary {
+  background-color: var(--primary-color);
+}
+
+.text-primary-contrast {
+  color: var(--primary-color-text);
+}
+
+.cart-wrapper {
+  min-height: 100%;
+  transition: background 0.3s ease;
+}
+
+.flex-grow::-webkit-scrollbar {
+  width: 6px;
+}
+
+.flex-grow::-webkit-scrollbar-thumb {
+  background: var(--surface-300);
+  border-radius: 10px;
+}
+
+.dark .flex-grow::-webkit-scrollbar-thumb {
+  background: var(--surface-700);
+}
