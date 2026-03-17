@@ -2,32 +2,56 @@
 <products>
   <product>
     <id>1</id>
-    <name>Prueba</name>
+    <name>LoveBox</name>
     <price>1200.50</price>
     <image>lovebox-1.webp</image>
-    <category>Prueba</category>
-    <quantity>1</quantity>
-    <description>Desc.</description>
+    <category>Decoración</category>
+    <quantity>10</quantity>
+    <description>Caja que recibe mensajes de manera remota de una menra coqueta e inmediata</description>
     <inStock>INSTOCK</inStock>
   </product>
   <product>
     <id>2</id>
-    <name>Prueba</name>
-    <price>1200.50</price>
-    <image>lovebox-1.webp</image>
-    <category>Prueba</category>
-    <quantity>1</quantity>
-    <description>Desc.</description>
+    <name>LuvLink - Classic</name>
+    <price>1400.50</price>
+    <image>luvlink1.webp</image>
+    <category>Iluminación</category>
+    <quantity>100</quantity>
+    <description>Lámpara que cambia de color cuando uno de las personas en los extremos la toca, estilo minimalista</description>
     <inStock>LOWSTOCK</inStock>
   </product>
+
   <product>
     <id>3</id>
-    <name>Prueba</name>
-    <price>1200.50</price>
-    <image>lovebox-1.webp</image>
-    <category>Prueba</category>
-    <quantity>1</quantity>
-    <description>Desc.</description>
+    <name>Touch Bond</name>
+    <price>199.50</price>
+    <image>bond_touch1.webp</image>
+    <category>Accesorio</category>
+    <quantity>102</quantity>
+    <description>Pulsera que manda señales y pulsos cuanto tu pareja las emite</description>
+    <inStock>INSTOCK</inStock>
+  </product>
+
+  <product>
+    <id>4</id>
+    <name>LuvLink - Heart</name>
+    <price>99.50</price>
+    <image>luvlink_heart.webp</image>
+    <category>Iluminación</category>
+    <quantity>102</quantity>
+    <description>Lámpara que cambia de color cuando uno de las personas en los extremos la toca, estilo minimalista forma de corazón con vista al ESP32</description>
+    <inStock>INSTOCK</inStock>
+  </product>
+
+  <product>
+    <id>5</id>
+    <name>LuvLink - Circle</name>
+    <price>1499.50</price>
+    <image>luvlink_circle.webp</image>
+    <category>Iluminación</category>
+    <quantity>102</quantity>
+    <description>Lámpara que cambia de color cuando uno de las personas en los extremos la toca, estilo minimalista forma de loop circular</description>
     <inStock>OUTOFSTOCK</inStock>
   </product>
+
 </products>
