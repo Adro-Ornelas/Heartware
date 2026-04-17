@@ -9,16 +9,16 @@
       <button 
         (click)="empty()" 
         [disabled]="cart().length === 0"
-        class="px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900/100 rounded-lg transition-colors disabled:opacity-50">
+        class="px-4 py-2 text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-900 rounded-lg transition-colors disabled:opacity-50">
         Vaciar carrito
       </button>
     </div>
 
     <div class="flex flex-col lg:flex-row">
-      <div class="flex-grow p-6 space-y-4">
+      <div class="grow p-6 space-y-4">
         @for (item of cart(); track item.id) {
           <div class="flex items-center justify-between p-4 rounded-xl border border-surface-100 dark:border-surface-800 bg-surface-50/50 dark:bg-surface-800/30">
-            <div class="flex-grow">
+            <div class="grow">
               <h3 class="font-semibold text-surface-900 dark:text-surface-0">{{ item.name }}</h3>
               @if (item.description) {
                 <p class="text-sm text-surface-500 dark:text-surface-400 line-clamp-1">{{ item.description }}</p>

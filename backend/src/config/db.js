@@ -12,12 +12,7 @@ conecction.connect((error) => {
     if (error) {
         console.error('Error on coneection MySQL:', error);
     } else {
-        console.log('Successful conection: ',
-            process.env.DB_HOST,
-            '\n', process.env.DB_USER,
-            '\n', process.env.DB_PASSWORD,
-            '\n', process.env.DB_NAME,
-        );
+        console.log('Successful conection: ');
     }
 });
 
