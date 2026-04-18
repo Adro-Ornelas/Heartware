@@ -7,4 +7,5 @@ export interface Product {
     quantity: number;
     description: string;
     inventoryStatus: string;   // INSTOCK, LOWTOCK, OUTOFSTOCK
+    createdAt: string;
 }
