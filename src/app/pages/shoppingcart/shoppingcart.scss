@@ -27,3 +27,18 @@
 .dark .flex-grow::-webkit-scrollbar-thumb {
   background: var(--surface-700);
 }
+
+/* Esto fuerza al contenedor de ngx-paypal a no tener fondo blanco */
+.paypal-container-fix {
+  background-color: transparent !important;
+}
+
+/* Apuntando a los selectores internos que genera la librería */
+ngx-paypal ::ng-deep .paypal-buttons {
+  background-color: transparent !important;
+}
+
+/* En modo oscuro, podemos forzar un filtro sutil si el botón sigue dando guerra */
+.dark .paypal-container-fix {
+  filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+}
