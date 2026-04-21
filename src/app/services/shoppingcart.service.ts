@@ -6,6 +6,14 @@ export class ShoppingCartService {
     private productosSignal = signal<Product[]>([]);
     products = this.productosSignal.asReadonly();
 
+
+    updateQuantity(id: number, newQuantity: number) {
+        this.productosSignal.update(items =>
+            items.map(item =>
+                item.id === id ? { ...item, quantity: newQuantity } : item
+            )
+        );
+    }
     add(producto: Product) {
         this.productosSignal.update(lista => [...lista, producto]);
     }
@@ -20,7 +28,7 @@ export class ShoppingCartService {
         return this.productosSignal().reduce((suma, producto) => {
             // Convertimos explícitamente el precio a número.
             // Si por alguna razón viene undefined o null, el || 0 evita que explote.
-            const precio = Number(producto.price) || 0;
+            const precio = Number(producto.price) * Number(producto.quantity) || 0;
 
             return suma + precio;
         }, 0);

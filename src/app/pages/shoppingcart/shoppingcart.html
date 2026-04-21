@@ -17,12 +17,23 @@
       <div class="grow p-6 space-y-4">
         @for (item of cart(); track item.id) {
         <div
-          class="flex items-center justify-between p-4 rounded-xl border border-surface-100 dark:border-surface-800 bg-surface-50/50 dark:bg-surface-800/30">
+          class="flex items-center justify-between p-4 gap-x-6 rounded-xl border border-surface-100 dark:border-surface-800 bg-surface-50/50 dark:bg-surface-800/30">
+
+          <img class="rounded w-1/6 gap-x-10" src="/images/{{ item.image }}" [alt]="item.name" />
+
           <div class="grow">
             <h3 class="font-semibold text-surface-900 dark:text-surface-0">{{ item.name }}</h3>
             @if (item.description) {
             <p class="text-sm text-surface-500 dark:text-surface-400 line-clamp-1">{{ item.description }}</p>
             }
+          </div>
+
+
+          <div class="flex flex-column gap-2">
+            <p-inputNumber [(ngModel)]="item.quantity" (ngModelChange)="onQuantityChange(item, $event)"
+              [showButtons]="true" buttonLayout="horizontal" spinnerMode="horizontal" [min]="1"
+              incrementButtonIcon="pi pi-plus" decrementButtonIcon="pi pi-minus" class="compact-input">
+            </p-inputNumber>
           </div>
 
           <div class="flex items-center gap-6 ml-4">
