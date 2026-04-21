@@ -30,6 +30,7 @@ export class Catalog {
     }
 
     add(product: Product){
+        product.quantity = 1;
         this.shoppingCartService.add(product);
         this.messageService.add({ 
             severity: 'success', 
