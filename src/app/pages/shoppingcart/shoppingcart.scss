@@ -10,6 +10,10 @@
   color: var(--primary-color-text);
 }
 
+.paypal-container {
+  margin-top: 1rem;
+}
+
 .cart-wrapper {
   min-height: 100%;
   transition: background 0.3s ease;
@@ -42,17 +46,19 @@ ngx-paypal ::ng-deep .paypal-buttons {
 .dark .paypal-container-fix {
   filter: drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
 }
+
 /* Esto acorta el ancho total del componente */
 :host ::ng-deep .compact-input {
-    .p-inputnumber-input {
-        width: 3rem !important; /* Ajusta este valor a tu gusto (ej. 50px) */
-        text-align: center;
-        padding: 0.5rem;
-    }
+  .p-inputnumber-input {
+    width: 3rem !important;
+    /* Ajusta este valor a tu gusto (ej. 50px) */
+    text-align: center;
+    padding: 0.5rem;
+  }
 
-    /* Opcional: Hace los botones más pequeños para que combinen */
-    .p-inputnumber-button {
-        width: 2.5rem;
-        padding: 0;
-    }
+  /* Opcional: Hace los botones más pequeños para que combinen */
+  .p-inputnumber-button {
+    width: 2.5rem;
+    padding: 0;
+  }
 }

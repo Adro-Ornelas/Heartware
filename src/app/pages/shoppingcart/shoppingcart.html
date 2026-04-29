@@ -75,11 +75,20 @@
           </button>
 
           <div class="relative z-0 overflow-hidden rounded-xl">
+
+
+            <div id="paypal-button-container" class="paypal-container"></div>
+
             @if (cart().length > 0) {
             <div class="paypal-container-fix min-h-37.5">
-              @if (cart().length > 0) {
-              <ngx-paypal [config]="payPalConfig"></ngx-paypal>
-              }
+              <!-- @if (cart().length > 0) { -->
+
+
+              <!-- <div *ngIf="loading()" class="status">Procesando...</div>
+              <div *ngIf="success()" class="status success">Pago realizado con éxito. Gracias.</div>
+              <div *ngIf="error()" class="status error">{{ error() }}</div> -->
+              <!-- <ngx-paypal [config]="payPalConfig"></ngx-paypal> -->
+              <!-- } -->
             </div>
             }
           </div>
