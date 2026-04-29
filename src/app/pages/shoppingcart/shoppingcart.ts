@@ -7,6 +7,8 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { PaymentService, CreatePaypalOrderPayload } from '../../services/payment.service';
 import { lastValueFrom } from 'rxjs';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-shoppingcart',
@@ -16,7 +18,10 @@ import { lastValueFrom } from 'rxjs';
         InputNumberModule,
         // Needed for inputNumber
         FormsModule,
-        CommonModule
+        CommonModule,
+
+        DialogModule,
+        ButtonModule
     ],
     templateUrl: './shoppingcart.html',
     styleUrl: './shoppingcart.scss'
@@ -29,7 +34,8 @@ export class Shoppingcart implements AfterViewInit {
     private shoppingCartService = inject(ShoppingCartService);
     // private paypalService = inject(PaypalService);
 
-
+    // Boolean variable to control the succes dialog visibility
+    displaySuccessDialog: boolean = false;
 
     constructor(private cartService: ShoppingCartService, private paymentService: PaymentService) { }
 
@@ -154,26 +160,26 @@ export class Shoppingcart implements AfterViewInit {
 
     // 1. Refactorizamos el constructor del Payload
     private buildOrderPayload(): any {
-    const currentCart = this.cart(); 
+        const currentCart = this.cart();
 
-    // 1. Mapeamos los productos EXACTAMENTE como lo pide la interfaz de tu Backend
-    const backendItems = currentCart.map(item => ({
-      nombre: item.name.substring(0, 127),
-      cantidad: Number(item.quantity || 1),
-      precio: Number(item.price)
-    }));
+        // 1. Mapeamos los productos EXACTAMENTE como lo pide la interfaz de tu Backend
+        const backendItems = currentCart.map(item => ({
+            nombre: item.name.substring(0, 127),
+            cantidad: Number(item.quantity || 1),
+            precio: Number(item.price)
+        }));
 
-    // 2. Calculamos el total exacto basado en estos items para evitar el error de PayPal
-    const exactPaypalTotal = backendItems.reduce((suma, item) => {
-      return suma + (item.precio * item.cantidad);
-    }, 0).toFixed(2);
+        // 2. Calculamos el total exacto basado en estos items para evitar el error de PayPal
+        const exactPaypalTotal = backendItems.reduce((suma, item) => {
+            return suma + (item.precio * item.cantidad);
+        }, 0).toFixed(2);
 
-    // 3. Enviamos al backend la estructura simple que él está esperando
-    return {
-      total: exactPaypalTotal,
-      items: backendItems
-    };
-  }
+        // 3. Enviamos al backend la estructura simple que él está esperando
+        return {
+            total: exactPaypalTotal,
+            items: backendItems
+        };
+    }
 
     // 2. El resto de tu código se mantiene limpio y manejando errores
     private async loadPayPal() {
@@ -243,10 +249,14 @@ export class Shoppingcart implements AfterViewInit {
 
                     // const customerData = this.cartService.getCustomerData();
                     const paypalData = { orderId: data.orderID, status: (capture as any)?.status || 'COMPLETED' };
+
+
                     this.cartService.exportXML();
 
+                    this.displaySuccessDialog = true;                    
+
                     this.cartService.empty();
-                    // this.router.navigate(['/']);
+                    
                 } catch (err: any) {
                     this.error.set('Error capturando pago: ' + (err?.message || err));
                 } finally {
