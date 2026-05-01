@@ -25,7 +25,7 @@ export class LayoutService {
         preset: 'Aura',
         primary: 'rose', // Color rosa-rojo predeterminado
         surface: null,
-        darkTheme: true,   // Dark mode activado predeterminado
+        darkTheme: false,   // Dark mode activado predeterminado
         menuMode: 'static'
     });
 

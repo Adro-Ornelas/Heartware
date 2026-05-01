@@ -4,6 +4,7 @@ import { provideRouter, withEnabledBlockingInitialNavigation, withInMemoryScroll
 import Aura from '@primeuix/themes/aura';
 import { providePrimeNG } from 'primeng/config';
 import { appRoutes } from './app.routes';
+import { provideLottieOptions } from 'ngx-lottie';
 
 
 export const appConfig: ApplicationConfig = {
@@ -15,5 +16,10 @@ export const appConfig: ApplicationConfig = {
 
         // Enable HttpClient
         provideHttpClient(),
+
+        // Lottie configuration
+        provideLottieOptions({
+            player: () => import('lottie-web')
+        })
     ]
 };

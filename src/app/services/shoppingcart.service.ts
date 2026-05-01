@@ -15,7 +15,21 @@ export class ShoppingCartService {
         );
     }
     add(producto: Product) {
-        this.productosSignal.update(lista => [...lista, producto]);
+        this.productosSignal.update(lista => {
+            const index = lista.findIndex(p => p.id === producto.id);
+
+            if (index !== -1) {
+                // ya existe → incrementa
+                const updated = [...lista];
+                updated[index] = {
+                    ...updated[index],
+                    quantity: (updated[index].quantity || 1) + 1
+                };
+                return updated;
+            }
+
+            return [...lista, { ...producto, quantity: 1 }];
+        });
     }
     removeProduct(id: number) {
         this.productosSignal.update(lista => lista.filter(p => p.id !== id));
@@ -32,6 +46,27 @@ export class ShoppingCartService {
 
             return suma + precio;
         }, 0);
+    }
+
+    exists(id: number): boolean {
+        return this.productosSignal().some(p => p.id === id);
+    }
+
+    getQuantity(id: number): number {
+        return this.productosSignal().find(p => p.id === id)?.quantity || 0;
+    }
+
+    increase(id: number) {
+        this.updateQuantity(id, this.getQuantity(id) + 1);
+    }
+
+    decrease(id: number) {
+        const current = this.getQuantity(id);
+        if (current <= 1) {
+            this.removeProduct(id);
+        } else {
+            this.updateQuantity(id, current - 1);
+        }
     }
     // total(): number {
     //     // Usamos (p.price ?? 0) para que si es undefined, tome 0
@@ -61,7 +96,7 @@ export class ShoppingCartService {
         a.href = url;
         a.download = 'Receipt.xml';
         a.click();
-
+        
         URL.revokeObjectURL(url);
     }
 

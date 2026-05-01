@@ -13,31 +13,35 @@ import { Observable } from 'rxjs';
 import { ShoppingCartService } from '@/app/services/shoppingcart.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { RouterModule } from '@angular/router';
+import { DialogModule } from 'primeng/dialog';
+import { LottieComponent } from 'ngx-lottie';
+import { MiniCart } from '../mini-cart/mini-cart';
 @Component({
     selector: 'app-catalog',
     standalone: true,
-    imports: [CommonModule, DataViewModule, FormsModule, SelectButtonModule, TagModule, ButtonModule, TableModule, ToastModule],
+    imports: [CommonModule, DataViewModule, FormsModule, SelectButtonModule, TagModule, ButtonModule, 
+        TableModule, ToastModule, RouterModule, DialogModule, LottieComponent, MiniCart],
     templateUrl: './catalog.html',
     styleUrls: ['./catalog.css'],
     providers: [ProductService, MessageService]
 })
 export class Catalog {
+    showSuccess = false;
     // products: Product[] = []; Versión vieja, necesita ser Observable para cargar correctamente
     products$: Observable<Product[]>;
 
-    constructor(private productService: ProductService, private shoppingCartService: ShoppingCartService, private messageService: MessageService) {
+    constructor(private productService: ProductService, private shoppingCartService: ShoppingCartService) {
         this.products$ = this.productService.getProducts();
     }
 
-    add(product: Product){
-        product.quantity = 1;
-        this.shoppingCartService.add(product);
-        this.messageService.add({ 
-            severity: 'success', 
-            summary: '¡Agregado!', 
-            detail: `${product.name} se añadió al carrito`,
-            life: 2000 
-        });
+    add(product: Product) {
+        this.animatingId = product.id;
+
+        setTimeout(() => {
+            this.shoppingCartService.add(product);
+            this.animatingId = null;
+        }, this.animationDuration);
     }
 
     ngOnInit() {
@@ -82,4 +86,34 @@ export class Catalog {
                 return 'info';
         }
     }
+
+    animatingId: number | null = null;
+    animationDuration = 2500;
+
+    lottieOptions = {
+        path: 'https://lottie.host/7d340901-6f1b-4237-9c8c-695eb40d9a88/obUmmBEoh8.json',
+    };
+
+    // helpers
+    isAnimating(product: Product) {
+        return this.animatingId === product.id;
+    }
+
+    isInCart(product: Product) {
+        return this.shoppingCartService.exists(product.id);
+    }
+
+    getQuantity(product: Product) {
+        return this.shoppingCartService.getQuantity(product.id);
+    }
+
+    increase(product: Product) {
+        this.shoppingCartService.increase(product.id);
+    }
+
+    decrease(product: Product) {
+        this.shoppingCartService.decrease(product.id);
+    }
+
+
 }

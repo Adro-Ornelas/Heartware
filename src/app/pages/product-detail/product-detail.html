@@ -1,0 +1,100 @@
+<app-mini-cart></app-mini-cart>
+<div *ngIf="showOverlay"
+     class="fixed inset-0 z-50 flex items-center justify-center
+            bg-black/40">
+
+  <ng-lottie 
+    [options]="lottieOptions"
+    style="width:150px; height:150px;">
+  </ng-lottie>
+
+</div>
+
+<div class="p-6 flex justify-center">
+  <div 
+    class="w-full max-w-6xl bg-white dark:bg-surface-900 rounded-2xl shadow-lg p-8"
+    *ngIf="product$ | async as product"
+  >
+
+    <div class="grid grid-cols-12 gap-8">
+
+      <!-- img -->
+      <div class="col-span-12 lg:col-span-6">
+        <div class="overflow-hidden rounded-xl">
+          <img 
+            class="w-full object-cover hover:scale-105 transition duration-300"
+            [src]="'/images/' + product.image"
+            [alt]="product.name"
+          />
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="col-span-12 lg:col-span-6 flex flex-col gap-6">
+
+        <!-- cat -->
+        <span class="text-sm text-surface-500 uppercase tracking-wide">
+          {{ product.category }}
+        </span>
+
+        <!-- name -->
+        <h1 class="text-4xl font-bold leading-tight">
+          {{ product.name }}
+        </h1>
+
+        <!-- price -->
+        <div class="flex items-center gap-4">
+          <span class="text-3xl font-semibold text-primary">
+            $ {{ product.price }}
+          </span>
+
+          <span class="text-sm bg-green-100 text-green-700 px-3 py-1 rounded-full">
+            Disponible
+          </span>
+        </div>
+
+        <!-- count -->
+        <div class="flex items-center gap-4">
+          <label class="font-medium">Cantidad</label>
+          <p-inputNumber 
+            [(ngModel)]="quantity" 
+            [min]="1"
+            inputStyleClass="w-20 text-center">
+          </p-inputNumber>
+        </div>
+
+        <!-- buttons -->
+        <div class="flex gap-3 mt-2">
+
+          <p-button 
+            label="Añadir al carrito"
+            icon="pi pi-shopping-cart"
+            styleClass="w-full p-button-lg p-button-danger"
+            (onClick)="addToCart(product)">
+          </p-button>
+
+          <p-button 
+            icon="pi pi-heart"
+            styleClass="p-button-lg"
+            [outlined]="true">
+          </p-button>
+
+        </div>
+
+        <!-- Divider -->
+        <div class="border-t border-surface-200 dark:border-surface-700 my-2"></div>
+
+        <!-- des -->
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Descripción</h3>
+          <p class="text-surface-600 leading-relaxed">
+            {{ product.description }}
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</div>
