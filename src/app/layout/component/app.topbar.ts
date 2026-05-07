@@ -15,7 +15,7 @@ import { LayoutService } from '@/app/layout/service/layout.service';
             <button class="layout-menu-button layout-topbar-action" (click)="layoutService.onMenuToggle()">
                 <i class="pi pi-bars"></i>
             </button>
-            <a class="layout-topbar-logo" routerLink="/">
+            <a class="layout-topbar-logo" routerLink="/pages/catalog">
                 <img src="images/favicon.webp" alt="Heartware logo" style="height: 40px;margin-left: 20px;">
                 <span>HEARTWARE</span>
             </a>

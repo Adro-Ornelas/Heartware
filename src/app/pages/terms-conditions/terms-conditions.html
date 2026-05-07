@@ -1,0 +1,311 @@
+<div class="min-h-screen bg-surface-50 dark:bg-surface-950 py-8 px-4 flex justify-content-center">
+    <p-card class="w-full max-w-4xl shadow-2xl border-none">
+
+        <div class="flex flex-column md:flex-row justify-content-between align-items-center gap-4 mb-4">
+            <p-selectButton [options]="stateOptions" [(ngModel)]="selectedView" optionLabel="label" optionValue="value"
+                styleClass="custom-select">
+            </p-selectButton>
+
+            <div>
+                <h1 class="text-4xl font-bold text-surface-900 dark:text-surface-0 m-0">Información Legal</h1>
+                <p class="text-surface-500 dark:text-surface-400 text-sm mt-1">Última actualización: {{ lastUpdate }}
+                </p>
+            </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <p-scrollPanel [style]="{ width: '100%', height: '60vh' }" styleClass="pr-3">
+            <div class="text-surface-700 dark:text-surface-300 line-height-3 text-lg">
+
+                @if (selectedView === 'terms') {
+                <div class="animate-fadein">
+                    <section class="mb-5">
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Términos y Condiciones</h2>
+                        <p>Estas Condiciones del Servicio («Condiciones») entran en vigor el 15 de abril de 2026.
+
+                            Heartware vende y diseña productos y herramientas de índole decorativa y lúdica con fines de
+                            obsequio. Estas Condiciones rigen su acceso y uso de nuestros productos a la venta (en
+                            adelante, los «Productos») ofrecidos por Heartware (en adelante, el «Vendedor») y vendidos a
+                            un cliente (en adelante, el «Comprador») a través del sitio web https://heartware.com/ (en
+                            adelante, el «Sitio web»).
+
+                            Debe aceptar estas Condiciones para crear una cuenta de Heartware y para acceder o utilizar
+                            los Servicios. Si no tiene una cuenta, acepta estas Condiciones al utilizar cualquier parte
+                            de los Servicios.
+
+                            Se considerará Comprador a toda persona física que no represente una actividad comercial,
+                            industrial, artesanal o liberal.
+                            Estas condiciones generales de venta constituyen el único documento contractual vinculante
+                            entre las Partes, independientemente de cualquier documentación comercial o técnica de
+                            carácter meramente indicativo.
+                        </p>
+
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Artículo 1 – Lea nuestra política de
+                            privacidad</h2>
+                        <p>Consulte nuestra Política de Privacidad para obtener información sobre nuestras prácticas de
+                            datos. Al acceder o utilizar los Servicios, usted acepta que podemos recopilar y utilizar su
+                            información de acuerdo con la Política de Privacidad.</p>
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Artículo 2 – Uso de los servicios</h2>
+                        <p>Las personas menores de 18 años en México (o la edad mínima de mayoría de edad en su
+                            jurisdicción) no podrán acceder ni utilizar los Servicios, ni crear cuentas, a menos que su
+                            padre, madre o tutor legal haya otorgado su consentimiento expreso, de conformidad con la
+                            Ley Federal de Protección de Datos Personales en Posesión de los Particulares y demás
+                            normatividad aplicable. Asimismo, no podrá acceder ni utilizar los Servicios si tiene
+                            prohibido recibirlos conforme a las leyes mexicanas, o si ha sido suspendido o dado de baja
+                            previamente de los Servicios por incumplimiento de nuestras políticas.
+                        </p>
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Artículo 3 – Designación del Vendedor</h2>
+                        <p>Heartware es una sociedad anónima simplificada (SAS) mexicana con domicilio social en la
+                            siguiente dirección: Calle Nueva Escocia #1885, Colonia Providencia 5ta Sección, Código
+                            Postal 44638, Guadalajara, Jalisco, México.
+
+                            Número de identificación fiscal comunitario (IVA): MX14015042007
+
+                            Puede contactar con Heartware por correo postal en su sede, por teléfono al +52 33 44 55 66
+                            77 o por correo electrónico a: contact@hearware.com
+
+                        </p>
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Artículo 4 – Propiedad intelectual</h2>
+                        <p>Todos los contenidos presentes en este sitio web, tales como textos, gráficos, logotipos,
+                            imágenes, clips de audio, descargas digitales, diseños, software y códigos HTML, son
+                            propiedad exclusiva del Vendedor o de sus proveedores de contenido, y están protegidos por
+                            las leyes de propiedad intelectual e industrial nacionales e internacionales.
+
+                            Queda expresamente prohibida la reproducción, duplicación, copia, venta, reventa o
+                            explotación de cualquier parte de nuestro sitio web con fines comerciales sin nuestro
+                            consentimiento previo por escrito. Esto incluye, pero no se limita a, el uso de logotipos o
+                            marcas registradas.
+                        </p>
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Artículo 5 – Objeto de las Condiciones
+                            Generales de Venta</h2>
+                        <p>El objeto de las presentes Condiciones Generales de Venta es definir las obligaciones legales
+                            de las Partes en el marco de la venta online de los Productos por parte del Vendedor en el
+                            Sitio Web.
+
+                            El Comprador puede acceder a estas Condiciones Generales de Venta en el Sitio Web.
+
+                            Al marcar la casilla correspondiente, el Comprador reconoce y acepta haber leído,
+                            comprendido y estar sujeto a las presentes Condiciones Generales de Venta. Por lo tanto, es
+                            responsabilidad del Comprador leer atentamente estas Condiciones Generales de Venta antes de
+                            realizar su pedido.
+
+                            Al confirmar su pedido, el Comprador acepta estas Condiciones Generales de Venta, cuyo
+                            almacenamiento y copia se realizan de conformidad con la normativa mexicana.
+
+                            Estas Condiciones Generales de Venta se aplicarán a todos los Productos entregados a los
+                            clientes, tanto físicos como digitales.
+
+                            En el caso de los productos digitales, incluyendo software, aplicaciones, licencias o
+                            contenido descargable entregado electrónicamente (en adelante, «Productos Digitales»), el
+                            Comprador reconoce que la entrega se realiza electrónicamente y se considera instantánea en
+                            el momento en que el Comprador accede o recibe el enlace de descarga. El Comprador acepta
+                            que los Productos Digitales no se suministran en un soporte físico.
+                        </p>
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Artículo 6 – Modificación de las
+                            Condiciones Generales de Venta
+                        </h2>
+                        <p>El Vendedor se reserva el derecho de modificar estas Condiciones Generales de Venta en
+                            cualquier momento sin previo aviso. Las modificaciones entrarán en vigor 10 días naturales
+                            después de su publicación en el Sitio Web.
+
+                        </p>
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Artículo 7 – Productos</h2>
+                        <p>4.1. Características
+                            Para cada uno de los Productos vendidos en línea, se encuentra disponible en el Sitio Web
+                            una descripción detallada de sus características fundamentales, de conformidad con las
+                            disposiciones legales aplicables a estas Condiciones Generales de Venta.
+
+                            El Comprador se compromete a leer atentamente estas características antes de realizar su
+                            pedido.
+
+                            Las fotografías y los vídeos del Sitio Web no constituyen documentos contractuales y no
+                            vinculan al Vendedor.
+
+                            En el caso de los Productos Digitales, la descripción incluye los requisitos técnicos
+                            (hardware, software, conexión a internet) necesarios para el uso del producto. El Comprador
+                            es responsable de verificar que su sistema cumple con estos requisitos.
+
+                            4.2. Conformidad
+                            Los Productos cumplen con la legislación mexicana vigente en el momento de su lanzamiento,
+                            incluyendo la legislación relativa a la salud y seguridad de las personas, el comercio justo
+                            y la protección del consumidor.
+
+                            Si el pedido se realiza desde un país distinto de México, el Comprador deberá asegurarse de
+                            que los Productos cumplen con la legislación vigente en el país de destino y de que pueden
+                            importarse a dicho país.
+
+                            Los Productos Digitales cumplen con la Ley Federal de Protección al Consumidor (LFPC),
+                            incluyendo los principios de comercio electrónico (Art. 76 bis) y la normativa vigente en
+                            materia de contenido digital, funcionalidad, compatibilidad y actualizaciones, garantizando
+                            la calidad y seguridad exigidas por la PROFECO. El Vendedor garantiza que los Productos
+                            Digitales se ajustarán a la descripción proporcionada y estarán libres de defectos que
+                            afecten sustancialmente a su funcionamiento.
+
+                        </p>
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Artículo 8 – Precio</h2>
+                        <p>El precio de cada Producto aparece en su descripción en el Sitio Web.
+
+                            El precio del Producto es el vigente el día del pedido, salvo error manifiesto.
+
+                            Los precios indicados no incluyen los gastos de envío. Los gastos de envío se calcularán al
+                            validar el pedido y se facturarán adicionalmente al precio inicial.
+
+                            Los precios se expresan en pesos mexicanos (MXN). Si esta moneda no es la utilizada en su
+                            país de residencia, el Comprador reconoce que podrían aplicarse costes adicionales según el
+                            método de pago utilizado.
+                        </p>
+                    </section>
+                </div>
+                } @else {
+                <div class="animate-fadein">
+                    <section class="mb-5">
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Aviso de privacidad</h2>
+
+                        <p>Somos una empresa mexicana dedicada a la venta de productos tecnológicos IoT con un propósito
+                            principalmente decorativo o lúdico. Heartware es una Sociedad por Acciones Simplificada
+                            (S.A.S.), con domicilio en C. Nueva Escocia 1885, Providencia 5a Secc., 44638 Guadalajara,
+                            Jal.
+                            México.</p>
+
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Recopilación de Datos</h2>
+                        <p> El uso de los productos y servicios de Heartware conlleva la recopilación de datos que le
+                            identifican directa o indirectamente.
+                            Los datos que te identifican directamente pueden ser tu nombre o apellido, tu correo
+                            electrónico, etc. También podemos recopilar datos que no nos permiten identificarte al
+                            instante.
+                            Estos datos de identificación indirecta pueden ser, por ejemplo, mensajes enviados a través
+                            de
+                            los dispositivos IoT, o interacciones con estos.
+                            La protección de todos estos datos es fundamental para nuestra Política de Privacidad y nos
+                            comprometemos a aplicarles un nivel óptimo de seguridad.
+                        </p>
+
+                        <h2 class="text-2xl font-semibold text-primary mb-3">
+                            Finalidad de sus datos</h2>
+                        <p>Para mejorar los productos y servicios de Heartware.
+                            Con el fin de mejorar nuestros productos y servicios y garantizar la disponibilidad de
+                            nuestra
+                            plataforma, mantenemos un registro, en forma de datos de conexión (registros), de las
+                            operaciones realizadas, de acuerdo con los estándares de Internet.
+                            Nunca trabajamos con sus datos que lo identifiquen a menos que usted haya dado su
+                            consentimiento
+                            previo. Esto puede ocurrir para resolver un problema que nos haya reportado: cuando se
+                            comunica
+                            con nuestro servicio de atención al cliente.
+                            Para proporcionarle información.
+                            Podemos utilizar ciertos datos para ofrecerte encuestas, concursos, cupones o información
+                            sobre
+                            eventos en los que puedas participar. Asimismo, utilizaremos estos mismos medios para
+                            comunicarte información sobre nuestros productos, como nuevas funciones, ofertas comerciales
+                            de
+                            Heartware o para anunciar nuevos productos.
+                            Realizar estadísticas y/o análisis de datos agregados y/o anonimizados.
+                            Nos comprometemos a no vender jamás sus datos personales sin su consentimiento. En
+                            Heartware,
+                            creemos que los datos también pueden servir al interés colectivo. Podemos realizar
+                            estadísticas
+                            y análisis utilizando datos previamente anonimizados y/o agregados. Esto contribuye a
+                            proteger.
+                            su privacidad.</p>
+                        <h2 class="text-2xl font-semibold text-primary mb-3">
+                            Seguridad de datos</h2>
+                        <p> Para garantizar la seguridad de su información, utilizamos Supabase, una plataforma de
+                            infraestructura en la nube que implementa medidas de seguridad administrativas, técnicas y
+                            físicas de nivel industrial. Sus datos personales se encuentran protegidos mediante:
+                            Cifrado de datos: Toda la información se transmite de forma segura mediante protocolos
+                            SSL/TLS y
+                            se almacena utilizando cifrado en reposo (AES-256).
+                            Seguridad a nivel de fila (RLS): Implementamos políticas estrictas de acceso para asegurar
+                            que
+                            cada usuario solo pueda consultar o modificar su propia información.
+                            Autenticación segura: El acceso a las cuentas está protegido por métodos de autenticación
+                            robustos, evitando el almacenamiento de contraseñas en texto plano.
+                            Infraestructura confiable: Los datos se alojan en centros de datos que cumplen con
+                            certificaciones internacionales de seguridad (como SOC2 y cumplimiento con estándares ISO).
+                        </p>
+
+                        <h2 class="text-2xl font-semibold text-primary mb-3">
+                            Retención de datos</h2>
+                        <p>Salvo que la ley nos obligue a conservarlos durante un período específico, mantenemos sus
+                            datos
+                            personales durante el tiempo estrictamente necesario para los fines para los que fueron
+                            recopilados y procesados. Por lo tanto, conservamos sus datos personales asociados a su
+                            cuenta
+                            hasta que usted la elimine.</p>
+
+                        <h2 class="text-2xl font-semibold text-primary mb-3">
+                            Herramientas para mantener el control sobre sus datos personales</h2>
+                        <p> Siempre debes contar con los medios para proteger tu privacidad al usar dispositivos
+                            conectados,
+                            creemos que debemos apoyar y proteger tu privacidad de la mejor manera, garantizandote los
+                            siguientes derechos:
+
+                            Derecho a acceder a sus datos: Sus datos personales son y deben seguir siendo fácilmente
+                            accesibles.
+                            Derecho a rectificar sus datos: En cualquier momento, usted podrá rectificar, completar,
+                            eliminar o actualizar sus datos personales mediante una acción activa por su parte. Esto
+                            puede
+                            hacerse desde la configuración de su cuenta.
+                            Derecho a oponerse al tratamiento de sus datos: Por motivos legítimos, puede oponerse al
+                            tratamiento de sus datos personales. Esta acción podría afectar su uso de los productos y
+                            servicios de Heartware.
+                            Derecho a proteger sus datos: En Heartware, utilizamos diferentes métodos para proteger tus
+                            datos. Para acceder a ellos, debes tener una cuenta protegida con contraseña.
+                            Derecho al olvido: Tienes el derecho de eliminar tu información de identificación personal
+                            eliminando tu cuenta, esto borrará toda tu información recopilada de nuestra base de datos.
+                        </p>
+
+
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Edad mínima requerida para usar nuestros
+                            servicios</h2>
+                        <p> Debes ser mayor de dieciocho (18) años para crear una cuenta y utilizar nuestros productos y
+                            servicios.
+
+                            Si eres menor de edad, debes tener en cuenta que tus padres o tutores legales deben darnos
+                            su
+                            consentimiento contactando con nuestra atención al cliente. Nuestros equipos responderán a
+                            cualquier pregunta que tú y tus Padres puedan tener sobre el uso de nuestros productos y
+                            servicios, así como sobre las normas relativas a la recopilación de datos personales.
+
+                            Si llegamos a tener en nuestro poder datos de personas menores de dieciocho (18) años de
+                            edad, o
+                            de un menor que haya utilizado nuestros productos y servicios sin el consentimiento de sus
+                            Padres, estaremos obligados a eliminar permanentemente los datos de nuestros servidores
+                            cuando
+                            se nos notifique.
+                        </p>
+
+
+                        <h2 class="text-2xl font-semibold text-primary mb-3">Edad mínima requerida para usar nuestros
+                            servicios</h2>
+
+                        <p>
+
+
+                            Cambios en el Aviso de Privacidad
+                            Nos reservamos el derecho de modificar este Aviso de Privacidad periódicamente, a nuestra
+                            entera
+                            discreción. Le notificaremos sobre los cambios importantes en el tratamiento de su
+                            información
+                            personal de forma adecuada, por ejemplo, enviando un aviso a la dirección de correo
+                            electrónico
+                            principal, publicando un aviso destacado en nuestro Sitio web o mediante otros métodos
+                            apropiados. Es su responsabilidad revisar este Aviso de Privacidad periódicamente. Cuando
+                            modifiquemos el Aviso de Privacidad, también actualizaremos la fecha de la última
+                            modificación.</p>
+                    </section>
+                </div>
+                }
+
+            </div>
+        </p-scrollPanel>
+
+        <p-divider></p-divider>
+
+        <div class="flex justify-content-end mt-3">
+            <p-button label="Regresar al Catálogo" icon="pi pi-home" routerLink="/"></p-button>
+        </div>
+
+    </p-card>
+</div>
