@@ -68,16 +68,20 @@ export class ShoppingCartService {
             this.updateQuantity(id, current - 1);
         }
     }
-    
-    exportXML() {
+
+    exportXML(customer?: any, paypal?: any) {
         const productos = this.productosSignal();
-        
+
         // CFDI 4.0 requiere fecha en formato específico: YYYY-MM-DDThh:mm:ss
         const fechaActual = new Date().toISOString().substring(0, 19);
 
         // Cálculos matemáticos precisos para el SAT (Asumiendo que price NO tiene IVA)
         let subTotal = 0;
         let totalImpuestosTrasladados = 0;
+
+        // Ahora usamos los datos reales de PayPal para el Receptor
+        const nombreReceptor = customer?.nombre ? this.escapeXml(customer.nombre).toUpperCase() : "PUBLICO EN GENERAL";
+        const cpReceptor = customer?.codigoPostal || "00000";
 
         // 1. Construir los Conceptos primero para tener las sumas exactas
         let conceptosXml = `<cfdi:Conceptos>\n`;
@@ -137,8 +141,13 @@ export class ShoppingCartService {
         // 3. Emisor (Tus datos como tienda)
         xml += `  <cfdi:Emisor Rfc="EKU9003173C9" Nombre="HEARTWARE SA DE CV" RegimenFiscal="601"/>\n`;
 
-        // 4. Receptor (Datos del cliente - Público en General por defecto)
-        xml += `  <cfdi:Receptor Rfc="XAXX010101000" Nombre="PUBLICO EN GENERAL" DomicilioFiscalReceptor="44100" RegimenFiscalReceptor="616" UsoCFDI="S01"/>\n`;
+        // Receptor Datos del cliente
+        xml += `  <cfdi:Receptor 
+        Rfc="XAXX010101000" 
+        Nombre="${nombreReceptor}" 
+        DomicilioFiscalReceptor="${cpReceptor}" 
+        RegimenFiscalReceptor="616" 
+        UsoCFDI="S01"/>\n`;
 
         // 5. Insertar Conceptos
         xml += conceptosXml;
@@ -160,7 +169,7 @@ export class ShoppingCartService {
         a.href = url;
         a.download = `CFDI_40_Pendiente_Timbrado_${Date.now()}.xml`;
         a.click();
-        
+
         URL.revokeObjectURL(url);
     }
 

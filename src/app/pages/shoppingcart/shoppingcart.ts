@@ -62,14 +62,7 @@ export class Shoppingcart implements AfterViewInit {
         this.shoppingCartService.empty();
     }
 
-    exportXML() {
-        this.shoppingCartService.exportXML();
-    }
-
     ngOnInit(): void {
-        // this.initConfig();
-        // this.payPalConfig = this.paypalService.getPayPalConfig();
-
 
         if (this.cart.length === 0) {
             this.error.set('El carrito está vacío. Agrega productos antes de pagar.');
@@ -82,94 +75,18 @@ export class Shoppingcart implements AfterViewInit {
         this.loadPayPal();
     }
 
-    // private initConfig(): void {
-    //     const currency = 'MXN';
-
-    // this.payPalConfig = {
-    // currency: currency,
-    // clientId: 'AWBOrThpKPVJcry7F6Yl3ToVA5uI85PxRLb80rT3d8iyoTzs09lxVNyN06UKBGGHUnWrsePXB6jC9c1N',
-    // // Executed when user clicks paypal button
-    // createOrderOnClient: (data) => {
-
-    //     const currentCart = this.cart();
-    //     const currentTotalValue = Number(this.total()).toFixed(2);
-
-    //     // Maps products to PayPal's format
-    //     const paypalItems = currentCart.map(item => ({
-    //         name: item.name.substring(0, 127), // PayPal has a limit of 127 chars per name
-    //         quantity: (item.quantity || 1).toString(), // Take quantity, 1 if null
-    //         category: 'PHYSICAL_GOODS',
-    //         unit_amount: {
-    //             currency_code: currency,
-    //             value: Number(item.price).toFixed(2), // Paypals need a float fixed number 2 decimals
-    //         },
-    //     }));
-
-    //     // Return order
-    //     return <ICreateOrderRequest>{
-    //         intent: 'CAPTURE',
-    //         purchase_units: [
-    //             {
-    //                 amount: {
-    //                     currency_code: currency,
-    //                     value: currentTotalValue,
-    //                     breakdown: {
-    //                         item_total: {
-    //                             currency_code: currency,
-    //                             value: currentTotalValue // La suma de los items DEBE coincidir con el valor total
-    //                         }
-    //                     }
-    //                 },
-    //                 items: paypalItems // Inyectamos los items mapeados aquí
-    //             }
-    //         ]
-    //     };
-    // },
-    // advanced: {
-    //     commit: 'true'
-    // },
-    // style: {
-    //     layout: 'vertical',
-    //     color: 'blue', // Opciones: 'gold', 'blue', 'silver', 'black'
-    //     shape: 'rect',
-    //     label: 'paypal'
-    // },
-    // onApprove: (data, actions) => {
-    //     console.log('onApprove - transaction was approved, but not authorized', data, actions);
-    //     actions.order.get().then((details: any) => {
-    //         console.log('onApprove - you can get full order details inside onApprove: ', details);
-    //     });
-    // },
-    // onClientAuthorization: (data) => {
-    //     console.log('onClientAuthorization - you should probably inform your server about completed transaction at this point', data);
-
-    //     // CALL BACKEND, STORE PURCHASE, EMTPY CAR, SHOW SUCCESS MESAGE
-    //     this.empty();
-    // },
-    // onCancel: (data, actions) => {
-    //     console.log('OnCancel', data, actions);
-    // },
-    // onError: err => {
-    //     console.log('OnError', err);
-    // },
-    // onClick: (data, actions) => {
-    //     console.log('onClick', data, actions);
-    // },
-    // };
-    // }
-
-    // 1. Refactorizamos el constructor del Payload
+    // Refactorizamos el constructor del Payload
     private buildOrderPayload(): any {
         const currentCart = this.cart();
 
-        // 1. Mapeamos los productos EXACTAMENTE como lo pide la interfaz de tu Backend
+        // Mapeamos los productos EXACTAMENTE como lo pide la interfaz de tu Backend
         const backendItems = currentCart.map(item => ({
             nombre: item.name.substring(0, 127),
             cantidad: Number(item.quantity || 1),
             precio: Number(item.price)
         }));
 
-        // 2. Calculamos el total exacto basado en estos items para evitar el error de PayPal
+        // Calculamos el total exacto basado en estos items para evitar el error de PayPal
         const exactPaypalTotal = backendItems.reduce((suma, item) => {
             return suma + (item.precio * item.cantidad);
         }, 0).toFixed(2);
@@ -181,7 +98,7 @@ export class Shoppingcart implements AfterViewInit {
         };
     }
 
-    // 2. El resto de tu código se mantiene limpio y manejando errores
+    // El resto de tu código se mantiene limpio y manejando errores
     private async loadPayPal() {
         try {
             const { clientId } = await lastValueFrom(this.paymentService.getClientId());
@@ -247,16 +164,33 @@ export class Shoppingcart implements AfterViewInit {
                 try {
                     const capture = await lastValueFrom(this.paymentService.captureOrder(data.orderID));
 
+                    // EXTRAEMOS LA UBICACIÓN DESTINO
+                    // PayPal devuelve la dirección en purchase_units[0].shipping
+                    const shippingInfo = capture.purchase_units[0].shipping;
+                    const address = shippingInfo.address;
+
+                    const customerData = {
+                        nombre: shippingInfo.name.full_name,
+                        calle: address.address_line_1,
+                        ciudad: address.admin_area_2,
+                        estado: address.admin_area_1,
+                        codigoPostal: address.postal_code,
+                        pais: address.country_code
+                    };
+
                     // const customerData = this.cartService.getCustomerData();
-                    const paypalData = { orderId: data.orderID, status: (capture as any)?.status || 'COMPLETED' };
+                    const paypalData = {
+                        orderId: data.orderID,
+                        status: capture.status || 'COMPLETED'
+                    };
+                    
+                    // PASAMOS LOS DATOS AL XML                    
+                    this.cartService.exportXML(customerData, paypalData);
 
-
-                    this.cartService.exportXML();
-
-                    this.displaySuccessDialog = true;                    
+                    this.displaySuccessDialog = true;
 
                     this.cartService.empty();
-                    
+
                 } catch (err: any) {
                     this.error.set('Error capturando pago: ' + (err?.message || err));
                 } finally {
