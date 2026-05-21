@@ -82,6 +82,19 @@ export class ShoppingCartService {
         // Ahora usamos los datos reales de PayPal para el Receptor
         const nombreReceptor = customer?.nombre ? this.escapeXml(customer.nombre).toUpperCase() : "PUBLICO EN GENERAL";
         const cpReceptor = customer?.codigoPostal || "00000";
+        const calle = customer?.calle ? this.escapeXml(customer.calle) : "DESCONOCIDO";
+        
+        const ciudad = customer?.ciudad ? this.escapeXml(customer.ciudad) : "DESCONOCIDO";        
+        const pais = customer?.pais ? this.escapeXml(customer.pais) : "DESCONOCIDO";
+        
+        // TESTING
+        console.log(calle, ' ', cpReceptor, ' ', ciudad, ' ', pais);
+
+        //                 calle: address.address_line_1,
+        //                 ciudad: address.admin_area_2,
+        //                 estado: address.admin_area_1,
+        //                 codigoPostal: address.postal_code,
+        //                 pais: address.country_code
 
         // 1. Construir los Conceptos primero para tener las sumas exactas
         let conceptosXml = `<cfdi:Conceptos>\n`;
@@ -141,10 +154,18 @@ export class ShoppingCartService {
         // 3. Emisor (Tus datos como tienda)
         xml += `  <cfdi:Emisor Rfc="EKU9003173C9" Nombre="HEARTWARE SA DE CV" RegimenFiscal="601"/>\n`;
 
+        //  nombre: shippingInfo.name.full_name,
+        //                 calle: address.address_line_1,
+        //                 ciudad: address.admin_area_2,
+        //                 estado: address.admin_area_1,
+        //                 codigoPostal: address.postal_code,
+        //                 pais: address.country_code
+
         // Receptor Datos del cliente
         xml += `  <cfdi:Receptor 
         Rfc="XAXX010101000" 
-        Nombre="${nombreReceptor}" 
+        Nombre="${nombreReceptor}"         
+        Domicilio="${calle}"        
         DomicilioFiscalReceptor="${cpReceptor}" 
         RegimenFiscalReceptor="616" 
         UsoCFDI="S01"/>\n`;
