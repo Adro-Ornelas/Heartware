@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.3
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 02-06-2026 a las 11:58:14
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: localhost
+-- Generation Time: Jun 02, 2026 at 04:14 PM
+-- Server version: 12.2.2-MariaDB
+-- PHP Version: 8.5.6
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `heartware`
+-- Database: `heartware`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `orders`
+-- Table structure for table `orders`
 --
 
 CREATE TABLE `orders` (
@@ -43,7 +43,7 @@ CREATE TABLE `orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `orders`
+-- Dumping data for table `orders`
 --
 
 INSERT INTO `orders` (`id_order`, `id_user`, `payment_method`, `state`, `date`, `price`, `customer_name`, `street`, `city`, `state_address`, `postal_code`, `country`) VALUES
@@ -51,12 +51,14 @@ INSERT INTO `orders` (`id_order`, `id_user`, `payment_method`, `state`, `date`, 
 (5, 2, 'Digital wallet', 'accepted', '2026-06-02 05:56:13', 4798, 'John Doe', 'Calle Juarez 1', 'Miguel Hidalgo', 'CIUDAD DE MEXICO', '11580', 'MX'),
 (6, 2, 'Digital wallet', 'accepted', '2026-06-02 06:31:57', 7203, 'John Doe', 'Calle Juarez 1', 'Miguel Hidalgo', 'CIUDAD DE MEXICO', '11580', 'MX'),
 (7, 2, 'Digital wallet', 'accepted', '2026-06-02 07:01:30', 4802, 'John Doe', 'Calle Juarez 1', 'Miguel Hidalgo', 'CIUDAD DE MEXICO', '11580', 'MX'),
-(8, 2, 'Digital wallet', 'accepted', '2026-06-02 07:25:35', 6003, 'John Doe', 'Calle Juarez 1', 'Miguel Hidalgo', 'CIUDAD DE MEXICO', '11580', 'MX');
+(8, 2, 'Digital wallet', 'accepted', '2026-06-02 07:25:35', 6003, 'John Doe', 'Calle Juarez 1', 'Miguel Hidalgo', 'CIUDAD DE MEXICO', '11580', 'MX'),
+(11, 5, 'Digital wallet', 'accepted', '2026-06-02 15:47:22', 12, 'John Doe', 'Calle Juarez 1', 'Miguel Hidalgo', 'CIUDAD DE MEXICO', '11580', 'MX'),
+(12, 8, 'Digital wallet', 'accepted', '2026-06-02 16:02:44', 1201, 'John Doe', 'Calle Juarez 1', 'Miguel Hidalgo', 'CIUDAD DE MEXICO', '11580', 'MX');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `products`
+-- Table structure for table `products`
 --
 
 CREATE TABLE `products` (
@@ -72,18 +74,18 @@ CREATE TABLE `products` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Volcado de datos para la tabla `products`
+-- Dumping data for table `products`
 --
 
 INSERT INTO `products` (`id`, `name`, `price`, `image`, `category`, `quantity`, `description`, `inventory_status`, `created_at`) VALUES
-(1, 'LoveBox', 1200.50, 'lovebox-1.webp', 'Decoración', 4, 'Caja que recibe mensajes de manera remota de una menra coqueta e inmediata', 'LOWSTOCK', '2026-03-27 02:12:13'),
+(1, 'LoveBox', 1200.50, 'lovebox-1.webp', 'Decoración', 3, 'Caja que recibe mensajes de manera remota de una menra coqueta e inmediata', 'LOWSTOCK', '2026-03-27 02:12:13'),
 (2, 'LuvLink - Classic', 1400.50, 'luvlink1.webp', 'Iluminación', 18, 'Lámpara que cambia de color cuando uno de las personas en los extremos la toca, estilo minimalista', 'INSTOCK', '2026-03-27 02:13:23'),
 (3, 'Touch Bond', 199.50, 'bond_touch1.webp', 'Accesorio', 32, 'Pulsera que manda señales y pulsos cuanto tu pareja las emite', 'INSTOCK', '2026-03-27 03:21:40'),
 (4, 'LuvLink - Heart', 99.50, 'luvlink_heart.webp', 'Iluminación', 12, 'Lámpara que cambia de color cuando uno de las personas en los extremos la toca, estilo minimalista forma de corazón con vista al ESP32', 'INSTOCK', '2026-03-27 03:21:40'),
 (5, 'LuvLink - Circle', 1499.50, 'luvlink_circle.webp', 'Iluminación', 0, 'Lámpara que cambia de color cuando uno de las personas en los extremos la toca, estilo minimalista forma de loop circular', 'OUTOFSTOCK', '2026-03-27 03:21:40');
 
 --
--- Disparadores `products`
+-- Triggers `products`
 --
 DELIMITER $$
 CREATE TRIGGER `actualiza_estado_inventario` BEFORE UPDATE ON `products` FOR EACH ROW BEGIN
@@ -102,7 +104,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `products_orders`
+-- Table structure for table `products_orders`
 --
 
 CREATE TABLE `products_orders` (
@@ -112,7 +114,7 @@ CREATE TABLE `products_orders` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `products_orders`
+-- Dumping data for table `products_orders`
 --
 
 INSERT INTO `products_orders` (`id_product_order`, `id_order`, `id_product`) VALUES
@@ -140,12 +142,13 @@ INSERT INTO `products_orders` (`id_product_order`, `id_order`, `id_product`) VAL
 (28, 8, 1),
 (29, 8, 1),
 (30, 8, 1),
-(31, 8, 1);
+(31, 8, 1),
+(34, 12, 1);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `users`
+-- Table structure for table `users`
 --
 
 CREATE TABLE `users` (
@@ -158,32 +161,35 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `users`
+-- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id_user`, `name`, `last_name`, `email`, `password`, `type`) VALUES
 (2, 'Adrián Kosey', 'Angeles Ramos', 'adrian.kosey2@gmail.com', '$2b$10$/xzuglMuu46pizlCBIO2ReesCXE/Fyy9CgLiWAkgknolVDoPZygly', 'admin'),
-(3, 'Juanito', 'Perez', 'juanito@email.com', '$2b$10$FgWabgB/LzwAV/nRIdC8aOrl28EyrhVzLYSs8oqz6Zh.QlP3NnWOG', 'user');
+(3, 'Juanito', 'Perez', 'juanito@email.com', '$2b$10$FgWabgB/LzwAV/nRIdC8aOrl28EyrhVzLYSs8oqz6Zh.QlP3NnWOG', 'user'),
+(5, 'Adro', 'Ornelas', 'adotal1484@gmail.com', '$2b$10$1rh/7AhvOBw52EWlldPQNO89Q2qnOWtPeUiZNnaI9RraNqN8MB63W', 'user'),
+(6, 'Admin', 'Admin', 'admin@gmail.com', '$2b$10$fGcisHsNiMyi5r6xtaS6TuHkBorFI6x1kk/BDsdfz6D1nqA.9SNCm', 'admin'),
+(8, 'Adrian', 'Vivanco', 'a@gmail.com', '$2b$10$1/0by86ofLT5OvXnQEVmoOK3M8sTBamt6HRec9QtnfMapBF7AqtjC', 'user');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `orders`
+-- Indexes for table `orders`
 --
 ALTER TABLE `orders`
   ADD PRIMARY KEY (`id_order`),
   ADD KEY `fk_cus_user` (`id_user`);
 
 --
--- Indices de la tabla `products`
+-- Indexes for table `products`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `products_orders`
+-- Indexes for table `products_orders`
 --
 ALTER TABLE `products_orders`
   ADD PRIMARY KEY (`id_product_order`),
@@ -191,54 +197,54 @@ ALTER TABLE `products_orders`
   ADD KEY `fk_product_order` (`id_order`);
 
 --
--- Indices de la tabla `users`
+-- Indexes for table `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `orders`
+-- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id_order` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_order` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT de la tabla `products`
+-- AUTO_INCREMENT for table `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT de la tabla `products_orders`
+-- AUTO_INCREMENT for table `products_orders`
 --
 ALTER TABLE `products_orders`
-  MODIFY `id_product_order` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id_product_order` bigint(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
--- AUTO_INCREMENT de la tabla `users`
+-- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_user` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `orders`
+-- Constraints for table `orders`
 --
 ALTER TABLE `orders`
   ADD CONSTRAINT `fk_cus_user` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE CASCADE;
 
 --
--- Filtros para la tabla `products_orders`
+-- Constraints for table `products_orders`
 --
 ALTER TABLE `products_orders`
-  ADD CONSTRAINT `fk_order_product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`),
+  ADD CONSTRAINT `fk_order_product` FOREIGN KEY (`id_product`) REFERENCES `products` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `fk_product_order` FOREIGN KEY (`id_order`) REFERENCES `orders` (`id_order`) ON DELETE CASCADE;
 COMMIT;
 
