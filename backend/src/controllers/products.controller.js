@@ -1,13 +1,9 @@
 const db = require('../config/db');
 
 const getProducts = async (req, res) => {
-    const sql = 'SELECT * FROM products';
-    
+    const sql = 'SELECT * FROM products';    
     try {
-        // Con el nuevo pool de promesas, usamos await y desestructuramos el resultado [rows]
-        const [result] = await db.query(sql);
-        
-        // Enviamos el resultado al frontend
+        const [result] = await db.query(sql);        
         res.json(result);
     } catch (error) {
         console.error('Error al obtener productos de la BD:', error);

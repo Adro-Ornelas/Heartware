@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const signup = async (req, res) => {
-    const { username, email, password } = req.body;
+    const { name, last_name, email, password } = req.body;
 
     try {
         // Verificar si el usuario ya existe
@@ -17,8 +17,8 @@ const signup = async (req, res) => {
 
         // Insertar en la BD (ajusta las columnas según tu base de datos)
         await db.query(
-            'INSERT INTO users (username, email, password) VALUES (?, ?, ?)',
-            [username, email, hashedPassword]
+            'INSERT INTO users (name, last_name, email, password) VALUES (?, ?, ?, ?)',
+            [name, last_name, email, hashedPassword]
         );
 
         res.status(201).json({ message: 'Usuario registrado exitosamente' });

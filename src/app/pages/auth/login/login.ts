@@ -41,6 +41,11 @@ import { CommonModule } from '@angular/common';
                             <p-password id="password1" name="password" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="w-full mb-6" [fluid]="true" [feedback]="false" required></p-password>
 
                             <p-button type="submit" label="Sign In" styleClass="w-full" [loading]="isLoading()"></p-button>
+
+                            <div class="text-center pt-4">
+                                <span class="text-muted-color font-medium">¿No tienes una cuenta? </span>
+                                <a routerLink="/auth/signup" class="font-medium no-underline ml-2 text-primary cursor-pointer hover:underline">Regístrate</a>
+                            </div>
                         </form>
                     </div>
                 </div>
