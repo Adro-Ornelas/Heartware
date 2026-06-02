@@ -6,10 +6,13 @@ import { TimelineModule } from 'primeng/timeline';
 import { PurchaseOrder, OrderState } from '@/app/models/order.model';
 import { OrdersService } from '@/app/services/orders.service';
 
+import { DataViewModule } from 'primeng/dataview';
+import { AccordionModule } from 'primeng/accordion';
+
 @Component({
     selector: 'app-purchase-history',
     standalone: true,
-    imports: [CommonModule, CurrencyPipe, DatePipe, ButtonModule, TagModule, TimelineModule],
+    imports: [CommonModule, CurrencyPipe, DatePipe, ButtonModule, TagModule, TimelineModule, DataViewModule, AccordionModule],
     templateUrl: './purchase-history.html',
     styleUrl: './purchase-history.scss'
 })
