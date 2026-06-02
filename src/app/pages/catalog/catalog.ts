@@ -58,37 +58,11 @@ export class Catalog {
         }, this.animationDuration);
     }
 
-    ngOnInit() {
-        // TESTING
-        // this.products = [
-        //     {
-        //         id: 1,
-        //         name: 'Prueba',
-        //         price: 1,
-        //         image: 'lovebox-1.webp',
-        //         category: 'Prueba',
-        //         quantity: 1,
-        //         description: 'Desc',
-        //         inventoryStatus: 'INSTOCK'
-        //     }
-        // ];
-
-        // this.productService.getProducts().subscribe({
-        //     next: (data) => {
-        //         this.products = data;
-        //         this.loading = false; // Data arrived, stop loading
-        //     },
-        //     error: (err) => {
-        //         console.error('Error cargando XML: ', err);
-        //         this.loading = false; // Stop loading even on error
-        //     }
-        // });
-    }
 
     getSeverity(product: Product) {
         // Limpiamos el texto por si viene con alguna variación de la BD
         const status = (product.inventoryStatus || '').toUpperCase().trim();
-
+        
         switch (status) {
             case 'INSTOCK':
                 return 'success'; // Verde

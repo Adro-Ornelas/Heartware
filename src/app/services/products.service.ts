@@ -13,24 +13,24 @@ export class ProductService {
     // 1. Obtener todos los productos (Mapeo de Entrada)
     getProducts(): Observable<Product[]> {
         return this.http.get<any[]>(this.apiUrl).pipe(
-    //         map(dbProducts => dbProducts.map(dbItem => {
-    //             const stockDeBaseDatos = dbItem.quantity !== undefined ? dbItem.quantity : (dbItem.stock !== undefined ? dbItem.stock : 0);
-    //             const estadoDeBaseDatos = dbItem.inventoryStatus || dbItem.inventory_status || 'INSTOCK';
+            //         map(dbProducts => dbProducts.map(dbItem => {
+            //             const stockDeBaseDatos = dbItem.quantity !== undefined ? dbItem.quantity : (dbItem.stock !== undefined ? dbItem.stock : 0);
+            //             const estadoDeBaseDatos = dbItem.inventoryStatus || dbItem.inventory_status || 'INSTOCK';
 
-    //             return {
-    //                 id: dbItem.id,
-    //                 name: dbItem.name,
-    //                 price: Number(dbItem.price) || 0,
-    //                 image: dbItem.image,
-    //                 category: dbItem.category,
-    //                 quantity: Number(stockDeBaseDatos),
-    //                 inventoryStatus: String(estadoDeBaseDatos).toUpperCase().trim(),
-    //                 description: dbItem.description,
-    //                 createdAt: dbItem.created_at || dbItem.createdAt
-    //             };
-    //         }))
-    //     );
-    // }
+            //             return {
+            //                 id: dbItem.id,
+            //                 name: dbItem.name,
+            //                 price: Number(dbItem.price) || 0,
+            //                 image: dbItem.image,
+            //                 category: dbItem.category,
+            //                 quantity: Number(stockDeBaseDatos),
+            //                 inventoryStatus: String(estadoDeBaseDatos).toUpperCase().trim(),
+            //                 description: dbItem.description,
+            //                 createdAt: dbItem.created_at || dbItem.createdAt
+            //             };
+            //         }))
+            //     );
+            // }
             map(dbProducts => dbProducts.map(dbItem => this.convertToFrontend(dbItem)))
         );
     }
@@ -64,10 +64,11 @@ export class ProductService {
             price: Number(dbItem.price),
             image: dbItem.image,
             category: dbItem.category,
-            quantity: dbItem.quantity,
+            quantity: Number(dbItem.quantity || dbItem.stock || 0), // Soporta ambos nombres
             description: dbItem.description,
-            inventoryStatus: dbItem.inventory_status, // snake to camel
-            createdAt: dbItem.created_at
+            // Aquí está la solución para el estado:
+            inventoryStatus: (dbItem.inventory_status || dbItem.inventoryStatus || 'INSTOCK').toUpperCase(),
+            createdAt: dbItem.created_at || dbItem.createdAt
         };
     }
 
