@@ -37,6 +37,12 @@ export class AppMenu {
                         icon: 'pi pi-fw pi-shopping-cart',
                         routerLink: ['/pages/shoppingcart']
                     },
+
+                    {
+                        label: 'Admin Productos',
+                        icon: 'pi pi-fw pi-pencil',
+                        routerLink: ['/pages/crud/products/']
+                    },
                     {
                         label: 'Historial',
                         icon: 'pi pi-fw pi-history',
