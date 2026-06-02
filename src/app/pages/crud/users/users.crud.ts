@@ -13,8 +13,8 @@ import { DialogModule } from 'primeng/dialog';
 import { InputIconModule } from 'primeng/inputicon';
 import { IconFieldModule } from 'primeng/iconfield';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { PasswordModule } from 'primeng/password'; 
-
+import { PasswordModule } from 'primeng/password';
+import { ActivatedRoute } from '@angular/router';
 // Importa tus modelos y servicio
 import { User, UpdateUserPayload } from '@/app/models/user.model';
 import { UsersService } from '@/app/services/users.service';
@@ -44,12 +44,12 @@ import { UsersService } from '@/app/services/users.service';
 export class CrudUsers implements OnInit {
     userDialog: boolean = false;
     users = signal<User[]>([]);
-    
+
     // Extendemos Partial<User> para que el formulario acepte el password temporalmente
-    user: Partial<User> & { password?: string } = {}; 
+    user: Partial<User> & { password?: string } = {};
     selectedUsers!: User[] | null;
     submitted: boolean = false;
-    
+
     userTypes!: any[];
 
     @ViewChild('dt') dt!: Table;
@@ -57,11 +57,20 @@ export class CrudUsers implements OnInit {
     constructor(
         private userService: UsersService,
         private messageService: MessageService,
-        private confirmationService: ConfirmationService
+        private confirmationService: ConfirmationService,
+        private route: ActivatedRoute
     ) { }
 
     ngOnInit() {
         this.loadData();
+        this.route.queryParams.subscribe(params => {
+            const userIdToFilter = params['filter'];
+            if (userIdToFilter) {
+                setTimeout(() => {
+                    this.dt.filterGlobal(userIdToFilter, 'contains');
+                }, 100);
+            }
+        });
     }
 
     loadData() {

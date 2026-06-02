@@ -7,6 +7,7 @@ import { TermsConditions } from './terms-conditions/terms-conditions';
 import { PurchaseHistory } from './purchase-history/purchase-history';
 import { CrudProducts as CrudProducts } from './crud/products/products.crud';
 import { CrudUsers } from './crud/users/users.crud';
+import { OrdersCrud } from './crud/orders/orders.crud';
 
 export default [
     { path: 'catalog', component: Catalog },
@@ -17,5 +18,7 @@ export default [
     { path: 'terms-conditions', component: TermsConditions},
     {path:  'crud/products', component: CrudProducts},
     {path:  'crud/users', component: CrudUsers},
+    {path:  'crud/orders', component: OrdersCrud},
+    
     { path: '**', redirectTo: '/notfound' },
 ] as Routes;

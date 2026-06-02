@@ -1,0 +1,76 @@
+<div class="card">
+    <h2 class="text-2xl font-bold mb-4">Historial de Compras de los Usuarios</h2>
+
+    <p-table [value]="orders()" [tableStyle]="{ 'min-width': '60rem' }" [paginator]="true" [rows]="5">
+        <ng-template #header>
+            <tr>
+                <th>Usuario</th>
+                <th>Fecha</th>
+                <th>Destinatario</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>Total</th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-order>
+            <tr>
+                <td>
+                    <a [routerLink]="['/pages/crud/users']" [queryParams]="{ filter: order.id_user }"
+                        class="text-primary font-bold hover:underline cursor-pointer">
+                        ID: {{ order.id_user }}
+                    </a>
+                </td>
+                <td>{{ order.date | date:'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ order.customer_name }}</td>
+                <td>{{ order.street }}, {{ order.city }}</td>
+                <td>
+                    <p-tag [value]="order.state" [severity]="getSeverity(order.state)" />
+                </td>
+                <td class="font-bold">{{ order.price | currency }}</td>
+                <td>
+                    <p-button label="Ver Recibo" icon="pi pi-receipt" (onClick)="showProducts(order)" outlined />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-dialog header="Detalle del Pedido" [(visible)]="displayProductsDialog" [modal]="true" [style]="{ width: '500px' }">
+    <div class="receipt-container">
+        <div class="mb-4 border-bottom-1 surface-border pb-2">
+            <p class="m-0 text-sm text-surface-500">Fecha: {{ selectedOrder()?.date | date:'medium' }}</p>
+        </div>
+
+        <table class="w-full">
+            <thead>
+                <tr class="text-left text-surface-500 text-sm">
+                    <th class="py-2">Producto</th>
+                    <th class="py-2 text-center">Cant.</th>
+                    <th class="py-2 text-right">P. Unit</th>
+                    <th class="py-2 text-right">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let p of selectedOrderProducts()" class="border-top-1 surface-border">
+                    <td class="py-3">
+                        <div class="flex align-items-center gap-2">
+                            <img src="http://localhost:3000/images/{{ p.image }}" [alt]="p.name"
+                                style="width: 40px; height: 40px; object-fit: cover;" class="border-round shadow-sm" />
+                            <span>{{ p.name }}</span>
+                        </div>
+                    </td>
+                    <td class="py-3 text-center">{{ p.quantity }}</td>
+                    <td class="py-3 text-right">{{ p.price | currency }}</td>
+                    <td class="py-3 text-right">{{ (p.price * p.quantity) | currency }}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="font-bold text-xl border-top-2 surface-border">
+                    <td colspan="3" class="py-3 text-right">Total:</td>
+                    <td class="py-3 text-right">{{ selectedOrder()?.price | currency }}</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</p-dialog>

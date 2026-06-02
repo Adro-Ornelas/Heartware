@@ -58,6 +58,11 @@ export class AppMenu {
                         icon: 'pi pi-fw pi-users',
                         routerLink: ['/pages/crud/users/']
                     },
+                    {
+                        label: 'Admin Ordenes',
+                        icon: 'pi pi-fw pi-book',
+                        routerLink: ['/pages/crud/orders/']
+                    },
                 ]
             },
             
