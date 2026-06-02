@@ -25,7 +25,8 @@ export class OrdersCrud implements OnInit {
     ngOnInit() {
         const userId = this.ordersService.getCurrentUserId();
         if (userId) {
-            this.ordersService.getOrdersByUser(userId).subscribe(data => {
+
+            this.ordersService.getAllOrders().subscribe(data => {
                 // Ordenar por fecha descendente (más reciente primero)
                 const sorted = data.sort((a, b) => 
                     new Date(b.date).getTime() - new Date(a.date).getTime()

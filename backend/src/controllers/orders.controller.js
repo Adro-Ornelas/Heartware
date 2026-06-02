@@ -140,6 +140,120 @@ const getOrdersByUser = async (req, res) => {
     }
 };
 
+
+const getAllOrders = async (req, res) => {
+    try {
+        const sql = `
+            SELECT
+                o.id_order,
+                o.id_user,
+                o.payment_method,
+                o.state,
+                o.date,
+                o.price,
+
+                o.customer_name,
+                o.street,
+                o.city,
+                o.state_address,
+                o.postal_code,
+                o.country,
+
+                p.id AS product_id,
+                p.name AS product_name,
+                p.price AS product_price,
+                p.image AS product_image,
+                p.category AS product_category,
+                COUNT(p.id) AS product_quantity
+
+            FROM orders o
+
+            LEFT JOIN products_orders po
+                ON po.id_order = o.id_order
+
+            LEFT JOIN products p
+                ON p.id = po.id_product            
+
+            GROUP BY
+                o.id_order,
+                o.id_user,
+                o.payment_method,
+                o.state,
+                o.date,
+                o.price,
+
+                o.customer_name,
+                o.street,
+                o.city,
+                o.state_address,
+                o.postal_code,
+                o.country,
+
+                p.id,
+                p.name,
+                p.price,
+                p.image,
+                p.category
+
+            ORDER BY o.date DESC
+        `;
+
+        const [result] = await db.query(sql);
+
+        const ordersMap = new Map();
+
+        result.forEach((row) => {
+            if (!ordersMap.has(row.id_order)) {
+                ordersMap.set(row.id_order, {
+                    id_order: row.id_order,
+                    id_user: row.id_user,
+                    payment_method: row.payment_method,
+                    state: row.state,
+                    date: row.date,
+                    price: row.price,
+
+                    customer_name: row.customer_name,
+                    street: row.street,
+                    city: row.city,
+                    state_address: row.state_address,
+                    postal_code: row.postal_code,
+                    country: row.country,
+
+                    products: []
+                });
+            }
+
+            if (row.product_id) {
+                ordersMap.get(row.id_order).products.push({
+                    id: row.product_id,
+                    name: row.product_name,
+                    price: row.product_price,
+                    image: row.product_image,
+                    category: row.product_category,
+                    quantity: row.product_quantity
+                });
+            }
+        });
+
+        const orders = Array.from(ordersMap.values());
+
+        orders.forEach((order, index) => {
+            order.user_order_number = orders.length - index;
+        });
+
+        res.json(orders);
+
+        res.json(orders);
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: 'Error al obtener historial'
+        });
+    }
+};
+
+
 const createOrder = async (req, res) => {
     const connection = await db.getConnection();
 
@@ -261,5 +375,6 @@ const createOrder = async (req, res) => {
 
 module.exports = {
     createOrder,
-    getOrdersByUser
+    getOrdersByUser,
+    getAllOrders
 };

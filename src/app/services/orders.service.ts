@@ -25,6 +25,19 @@ export class OrdersService {
         );
     }
 
+      getAllOrders(): Observable<PurchaseOrder[]> {
+        console.log('Consultando órdenes');
+        return this.http.get<PurchaseOrder[]>(`${this.base}/orders/all`).pipe(
+            map((orders) =>
+                orders.map((order) => ({
+                    ...order,
+                    price: Number(order.price),
+                    products: (order.products || []).filter((product) => product?.id)
+                }))
+            )
+        );
+    }
+
     createOrder(payload: CreateOrderPayload): Observable<PurchaseOrder> {
         return this.http.post<PurchaseOrder>(`${this.base}/orders`, payload);
     }
