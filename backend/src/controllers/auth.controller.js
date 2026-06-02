@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 
 
-export const register = async (req, res) => {
+export const signup = async (req, res) => {
     console.log("Signup");
     // Verify if user exits BD
     // TDP
@@ -11,7 +11,7 @@ export const register = async (req, res) => {
     // Encrypt password
     const hashedPasword = await bcrypt.hash(passwrod, 10);
 
-    // Store user in BD
+    // insert user in BD
     // TDP
 }
 

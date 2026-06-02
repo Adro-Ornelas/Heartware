@@ -9,7 +9,7 @@ import { RippleModule } from 'primeng/ripple';
 import { AppFloatingConfigurator } from '@/app/layout/component/app.floatingconfigurator';
 
 @Component({
-    selector: 'app-login',
+    selector: 'app-signup',
     standalone: true,
     imports: [ButtonModule, CheckboxModule, InputTextModule, PasswordModule, FormsModule, RouterModule, RippleModule, AppFloatingConfigurator],
     template: `
@@ -23,7 +23,7 @@ import { AppFloatingConfigurator } from '@/app/layout/component/app.floatingconf
 
         
                             
-                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Bienvenido a Heartware</div>
+                            <div class="text-surface-900 dark:text-surface-0 text-3xl font-medium mb-4">Registrar usaurio</div>
                             <span class="text-muted-color font-medium">Inicia sesión para continuar</span>
                         </div>
 
@@ -46,7 +46,7 @@ import { AppFloatingConfigurator } from '@/app/layout/component/app.floatingconf
         </div>
     `
 })
-export class Login {
+export class SignUp {
     email: string = '';
 
     password: string = '';
