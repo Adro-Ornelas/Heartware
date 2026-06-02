@@ -1,4 +1,6 @@
 const db = require('../config/db');
+const multer = require('multer');
+const path = require('path');
 
 // OBTENER TODOS LOS PRODUCTOS
 const getProducts = async (req, res) => {
@@ -80,10 +82,39 @@ const deleteProduct = async (req, res) => {
     }
 };
 
-// Exportamos todos los métodos
+
+// Configuración de almacenamiento para Multer
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+        // __dirname es 'backend/controllers'
+        // '..' nos saca a 'backend'
+        // '..' nos saca a la raíz del proyecto (donde está tu 'public')
+        const uploadDir = path.join(__dirname, '..', '..', 'public', 'images');
+        
+        cb(null, uploadDir); 
+    },
+    filename: (req, file, cb) => {
+        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        cb(null, uniqueSuffix + path.extname(file.originalname));
+    }
+});
+
+const upload = multer({ storage: storage });
+
+// Controlador de respuesta para la subida individual
+const uploadImage = (req, res) => {
+    if (!req.file) {
+        return res.status(400).json({ error: 'No se subió ningún archivo' });
+    }
+    // Retornamos únicamente el nombre del archivo generado
+    res.json({ filename: req.file.filename });
+};
+
 module.exports = {
     getProducts,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    uploadImage,
+    uploadMiddleware: upload.single('image') 
 };

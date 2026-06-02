@@ -74,7 +74,7 @@ export class CrudProducts implements OnInit {
         private productService: ProductService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService
-    ) {}
+    ) { }
 
 
     exportCSV() {
@@ -160,15 +160,29 @@ export class CrudProducts implements OnInit {
         ];
     }
 
-    // Captura la respuesta del backend tras subir el archivo con éxito
     onImageUpload(event: any) {
-        // El servidor Express devuelve { filename: "1718293...jpg" }
-        const response = JSON.parse(event.xhr.response);
-        this.product.image = response.filename; 
-        
-        this.showToast('info', 'Imagen Subida', 'El archivo se procesó correctamente');
-    }
+        // PrimeNG moderno guarda el JSON del backend directamente en originalEvent.body
+        const response = event.originalEvent?.body || event.originalEvent;
 
+        if (response && response.filename) {
+            // Asignamos el nombre autogenerado (ej. 1780384383747-831758790.png)
+            this.product = {
+                ...this.product,
+                image: response.filename
+            };
+
+            this.messageService.add({
+                severity: 'info',
+                summary: 'Imagen Lista',
+                detail: `Archivo enlazado: ${this.product.image}`
+            });
+
+            // Verificación en consola
+            console.log('Nombre exacto para la BD:', this.product.image);
+        } else {
+            console.error('No se pudo extraer el nombre del archivo del evento de PrimeNG', event);
+        }
+    }
     saveProduct() {
         this.submitted = true;
 
