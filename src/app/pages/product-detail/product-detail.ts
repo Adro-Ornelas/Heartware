@@ -14,10 +14,11 @@ import { MiniCart } from '../mini-cart/mini-cart';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
+import { TagModule } from 'primeng/tag';
 @Component({
     selector: 'app-product-detail',
     standalone: true,
-    imports: [CommonModule, InputNumberModule, ButtonModule, FormsModule, LottieComponent, MiniCart,DialogModule, ToastModule],
+    imports: [CommonModule, InputNumberModule, ButtonModule, FormsModule, LottieComponent, MiniCart,DialogModule, ToastModule, TagModule],
     templateUrl: './product-detail.html',
     providers: [MessageService]
 })
@@ -79,6 +80,20 @@ export class ProductDetail {
         setTimeout(() => {
             this.showOverlay = false;
         }, this.overlayDuration);
+    }
+
+    getSeverity(product: Product) {
+        const status = (product.inventoryStatus || '').toUpperCase().trim();
+        switch (status) {
+            case 'INSTOCK':
+                return 'success'; // Verde
+            case 'LOWSTOCK':
+                return 'warn';    // Amarillo
+            case 'OUTOFSTOCK':
+                return 'danger';  // Rojo
+            default:
+                return 'info';
+        }
     }
 
 }
