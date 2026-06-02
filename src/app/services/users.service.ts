@@ -27,14 +27,38 @@ export class UsersService {
     setCurrentUserId(idUser: number) {
         localStorage.setItem('id_user', String(idUser));
     }
+    getUsers(): Observable<User[]> {
+        return this.http.get<User[]>(`${this.base}/users`);
+    }
+    createUser(payload: UpdateUserPayload): Observable<User> {
+        return this.http.post<User>(`${this.base}/users`, payload);
+    }
 
     getUser(idUser: number): Observable<User> {
-        return this.http.get<User>(`${this.base}/users/${idUser}`).pipe(tap((user) => this.setCurrentUserId(user.id_user)));
+        return this.http.get<User>(`${this.base}/users/${idUser}`).pipe(
+            tap((user) => {
+                // Protección: Solo actualiza el localStorage si te estás consultando a ti mismo
+                if (idUser === this.getCurrentUserId()) {
+                    this.setCurrentUserId(user.id_user);
+                }
+            })
+        );
     }
 
     updateUser(idUser: number, payload: UpdateUserPayload): Observable<User> {
-        return this.http.put<User>(`${this.base}/users/${idUser}`, payload).pipe(tap((user) => this.setCurrentUserId(user.id_user)));
+        return this.http.put<User>(`${this.base}/users/${idUser}`, payload).pipe(
+            tap((user) => {
+                // Protección: Evita que el Admin pierda su sesión al editar a otros usuarios del CRUD
+                if (idUser === this.getCurrentUserId()) {
+                    this.setCurrentUserId(user.id_user);
+                }
+            })
+        );
     }
+    deleteUser(idUser: number): Observable<void> {
+        return this.http.delete<void>(`${this.base}/users/${idUser}`);
+    }
+    
 
     private resolveApiBase(): string {
         try {
@@ -53,11 +77,6 @@ export class UsersService {
     logout(): void {
         localStorage.removeItem('id_user');
         localStorage.removeItem('userId');
-
-        // Si guardas más cosas relacionadas con la sesión:
-        // localStorage.removeItem('token');
-        // localStorage.removeItem('user');
-
         this.router.navigate(['/auth/login']);
     }
 

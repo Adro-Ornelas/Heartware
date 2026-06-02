@@ -37,12 +37,6 @@ export class AppMenu {
                         icon: 'pi pi-fw pi-shopping-cart',
                         routerLink: ['/pages/shoppingcart']
                     },
-
-                    {
-                        label: 'Admin Productos',
-                        icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/pages/crud/products/']
-                    },
                     {
                         label: 'Historial',
                         icon: 'pi pi-fw pi-history',
@@ -52,7 +46,18 @@ export class AppMenu {
                         label: 'Perfil',
                         icon: 'pi pi-fw pi-user',
                         routerLink: ['/pages/profile']
-                    }
+                    },
+
+                    {
+                        label: 'Admin Productos',
+                        icon: 'pi pi-fw pi-pencil',
+                        routerLink: ['/pages/crud/products/']
+                    },
+                    {
+                        label: 'Admin Usuarios',
+                        icon: 'pi pi-fw pi-users',
+                        routerLink: ['/pages/crud/users/']
+                    },
                 ]
             },
             
