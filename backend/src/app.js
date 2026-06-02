@@ -4,8 +4,11 @@ const productsRoutes = require('./routes/products.routes');
 const ordersRoutes = require('./routes/orders.routes');
 const usersRoutes = require('./routes/users.routes');
 const { errorHandler } = require('./middleware/error.middleware');
-
+const path = require('path');
 const app = express();
+
+// Serve images
+app.use('/images', express.static(path.join(__dirname, '../public/images')));
 
 app.use(cors());
 app.use(express.json());
