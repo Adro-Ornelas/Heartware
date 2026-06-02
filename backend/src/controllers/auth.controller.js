@@ -17,8 +17,8 @@ const signup = async (req, res) => {
 
         // Insertar en la BD (ajusta las columnas según tu base de datos)
         await db.query(
-            'INSERT INTO users (name, last_name, email, password) VALUES (?, ?, ?, ?)',
-            [name, last_name, email, hashedPassword]
+            'INSERT INTO users (name, last_name, email, password, type) VALUES (?, ?, ?, ?, ?)',
+            [name, last_name, email, hashedPassword, 'user']
         );
 
         res.status(201).json({ message: 'Usuario registrado exitosamente' });
