@@ -1,5 +1,5 @@
 const db = require('../config/db');
-
+const bcrypt = require('bcrypt');
 const sanitizeUser = (user) => ({
     id_user: user.id_user,
     name: user.name,
@@ -81,9 +81,11 @@ const updateUser = async (req, res) => {
             userType
         ];
 
-        if (password) {
+        if (password && password.trim() !== '') {
+            const hashedPassword = await bcrypt.hash(password, 10);
+
             fields.push('password = ?');
-            values.push(password);
+            values.push(hashedPassword);
         }
 
         values.push(idUser);
