@@ -35,10 +35,10 @@ import { CommonModule } from '@angular/common';
                             </div>
 
                             <label for="email1" class="block text-surface-900 dark:text-surface-0 text-xl font-medium mb-2">Correo electrónico</label>
-                            <input pInputText id="email1" type="email" name="email" placeholder="Email address" class="w-full md:w-120 mb-6" [(ngModel)]="email" required />
+                            <input pInputText id="email1" type="email" name="email" placeholder="Dirección de correo" class="w-full md:w-120 mb-6" [(ngModel)]="email" required />
 
                             <label for="password1" class="block text-surface-900 dark:text-surface-0 font-medium text-xl mb-2">Contraseña</label>
-                            <p-password id="password1" name="password" [(ngModel)]="password" placeholder="Password" [toggleMask]="true" styleClass="w-full mb-6" [fluid]="true" [feedback]="false" required></p-password>
+                            <p-password id="password1" name="password" [(ngModel)]="password" placeholder="Contraseña" [toggleMask]="true" styleClass="w-full mb-6" [fluid]="true" [feedback]="false" required></p-password>
 
                             <p-button type="submit" label="Sign In" styleClass="w-full" [loading]="isLoading()"></p-button>
 

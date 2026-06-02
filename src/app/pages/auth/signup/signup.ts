@@ -9,6 +9,7 @@ import { MessageModule } from 'primeng/message';
 import { AppFloatingConfigurator } from '@/app/layout/component/app.floatingconfigurator';
 import { AuthService } from '@/app/services/auth.service';
 import { CommonModule } from '@angular/common';
+import { DialogModule } from 'primeng/dialog';
 
 @Component({
     selector: 'app-signup',
@@ -16,7 +17,8 @@ import { CommonModule } from '@angular/common';
     imports: [
         CommonModule, ButtonModule, InputTextModule, 
         PasswordModule, FormsModule, RouterModule, 
-        RippleModule, AppFloatingConfigurator, MessageModule
+        RippleModule, AppFloatingConfigurator, MessageModule,
+        DialogModule
     ],
     template: `
         <app-floating-configurator />
@@ -59,6 +61,19 @@ import { CommonModule } from '@angular/common';
                 </div>
             </div>
         </div>
+
+    <p-dialog [(visible)]="displaySuccessDialog" [modal]="true" [closable]="false" [draggable]="false" [style]="{ width: '25rem' }">
+    <div class="flex flex-col items-center justify-center p-6 text-center gap-4">
+        <i class="pi pi-check-circle text-green-500" style="font-size: 5rem;"></i>
+
+        <h2 class="text-2xl font-bold text-surface-900 dark:text-surface-0 m-0">¡Registro exitoso!</h2>
+        <p class="text-surface-500 dark:text-surface-400 m-0">
+            Tu cuenta ha sido creada correctamente. Ya puedes iniciar sesión en Heartware.
+        </p>
+
+        <p-button label="Ir al Login" severity="success" styleClass="mt-4 w-full" (onClick)="goToLogin()"></p-button>
+    </div>
+</p-dialog>
     `
 })
 export class Signup {
@@ -69,12 +84,12 @@ export class Signup {
     
     isLoading = signal(false);
     errorMessage = signal('');
+    displaySuccessDialog = signal(false);
 
     private authService = inject(AuthService);
     private router = inject(Router);
 
-    onSignup() {
-        // Validación básica en Frontend
+   onSignup() {
         if (!this.name || !this.lastName || !this.email || !this.password) {
             this.errorMessage.set('Por favor, completa todos los campos.');
             return;
@@ -83,7 +98,6 @@ export class Signup {
         this.isLoading.set(true);
         this.errorMessage.set('');
 
-        // Payload estructurado con las variables solicitadas
         const signupData = {
             name: this.name,
             last_name: this.lastName,
@@ -93,8 +107,8 @@ export class Signup {
 
         this.authService.signup(signupData).subscribe({
             next: (res) => {
-                // Registro exitoso: redirigimos al login para que el usuario inicie sesión de forma segura
-                this.router.navigate(['/auth/login']);
+                // En lugar de redirigir de inmediato, mostramos el diálogo
+                this.displaySuccessDialog.set(true);
             },
             error: (err) => {
                 this.isLoading.set(false);
@@ -102,5 +116,11 @@ export class Signup {
             },
             complete: () => this.isLoading.set(false)
         });
+    }
+
+    // Método que se ejecuta cuando el usuario hace clic en el botón del diálogo
+    goToLogin() {
+        this.displaySuccessDialog.set(false);
+        this.router.navigate(['/auth/login']);
     }
 }
