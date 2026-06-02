@@ -69,8 +69,12 @@ export class ProductDetail {
         for (let i = 0; i < this.quantity; i++) {
             this.cartService.add(product);
         }
-
-        this.showOverlay = true;
+        this.messageService.add({ 
+                severity: 'success', 
+                summary: 'Producto agregado', 
+                detail: `Se ha agregado ${this.quantity} unidades de ${product.name}.` 
+            });
+        this.showOverlay = false;
 
         setTimeout(() => {
             this.showOverlay = false;
