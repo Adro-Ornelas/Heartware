@@ -39,6 +39,11 @@ export class AppMenu {
                         routerLink: ['/pages/shoppingcart']
                     },
                     {
+                        label: 'Historial',
+                        icon: 'pi pi-fw pi-history',
+                        routerLink: ['/pages/purchase-history']
+                    },
+                    {
                         label: 'Perfil',
                         icon: 'pi pi-fw pi-user',
                         routerLink: ['/pages/profile']

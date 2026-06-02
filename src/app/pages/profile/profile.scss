@@ -1,0 +1,35 @@
+.profile-wrapper {
+    min-height: calc(100vh - 8rem);
+}
+
+.profile-avatar {
+    align-items: center;
+    background: color-mix(in srgb, var(--primary-color) 16%, transparent);
+    border-radius: 999px;
+    color: var(--primary-color);
+    display: inline-flex;
+    font-size: 1.5rem;
+    font-weight: 800;
+    height: 4.5rem;
+    justify-content: center;
+    width: 4.5rem;
+}
+
+.profile-label {
+    color: var(--surface-500);
+    font-size: 0.75rem;
+    line-height: 1rem;
+    margin: 0 0 0.35rem;
+}
+
+.profile-value {
+    color: var(--surface-900);
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+:host-context(.app-dark) .profile-value {
+    color: var(--surface-0);
+}

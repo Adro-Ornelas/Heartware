@@ -9,7 +9,12 @@ export const createOrder = async (req: Request, res: Response, next: NextFunctio
     const id = (order as any)?.id || null;
     return res.status(201).json({ id });
   } catch (error) {
-    next(error);
+    console.error('PAYPAL CREATE ORDER ERROR');
+    console.error(error);
+
+    return res.status(500).json({
+        error: error instanceof Error ? error.message : String(error)
+    });
   }
 };
 

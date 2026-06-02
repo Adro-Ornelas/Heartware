@@ -1,0 +1,15 @@
+.history-wrapper {
+    min-height: calc(100vh - 8rem);
+}
+
+.history-state-icon {
+    align-items: center;
+    background: color-mix(in srgb, var(--primary-color) 12%, transparent);
+    border-radius: 999px;
+    color: var(--primary-color);
+    display: inline-flex;
+    flex: 0 0 auto;
+    height: 2.5rem;
+    justify-content: center;
+    width: 2.5rem;
+}
