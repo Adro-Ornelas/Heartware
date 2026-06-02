@@ -336,7 +336,7 @@ const createOrder = async (req, res) => {
             const [updateResult] = await connection.query(
                 `UPDATE products 
          SET quantity = quantity - ?,
-             inventoryStatus = CASE 
+             inventory_status = CASE 
                  WHEN (quantity - ?) <= 0 THEN 'OUTOFSTOCK'
                  WHEN (quantity - ?) <= 5 THEN 'LOWSTOCK' 
                  ELSE 'INSTOCK'

@@ -67,7 +67,7 @@ CREATE TABLE `products` (
   `category` varchar(100) DEFAULT NULL,
   `quantity` int(11) DEFAULT 0 CHECK (`quantity` >= 0),
   `description` text DEFAULT NULL,
-  `inventoryStatus` enum('INSTOCK','LOWSTOCK','OUTOFSTOCK') DEFAULT 'INSTOCK',
+  `inventory_status` enum('INSTOCK','LOWSTOCK','OUTOFSTOCK') DEFAULT 'INSTOCK',
   `created_at` timestamp NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -75,7 +75,7 @@ CREATE TABLE `products` (
 -- Volcado de datos para la tabla `products`
 --
 
-INSERT INTO `products` (`id`, `name`, `price`, `image`, `category`, `quantity`, `description`, `inventoryStatus`, `created_at`) VALUES
+INSERT INTO `products` (`id`, `name`, `price`, `image`, `category`, `quantity`, `description`, `inventory_status`, `created_at`) VALUES
 (1, 'LoveBox', 1200.50, 'lovebox-1.webp', 'Decoración', 4, 'Caja que recibe mensajes de manera remota de una menra coqueta e inmediata', 'LOWSTOCK', '2026-03-27 02:12:13'),
 (2, 'LuvLink - Classic', 1400.50, 'luvlink1.webp', 'Iluminación', 18, 'Lámpara que cambia de color cuando uno de las personas en los extremos la toca, estilo minimalista', 'INSTOCK', '2026-03-27 02:13:23'),
 (3, 'Touch Bond', 199.50, 'bond_touch1.webp', 'Accesorio', 32, 'Pulsera que manda señales y pulsos cuanto tu pareja las emite', 'INSTOCK', '2026-03-27 03:21:40'),
@@ -89,11 +89,11 @@ DELIMITER $$
 CREATE TRIGGER `actualiza_estado_inventario` BEFORE UPDATE ON `products` FOR EACH ROW BEGIN
     -- Evaluamos el nuevo valor de cantidad (NEW.quantity) que se va a guardar
     IF NEW.quantity <= 0 THEN
-        SET NEW.inventoryStatus = 'OUTOFSTOCK';
+        SET NEW.inventory_status = 'OUTOFSTOCK';
     ELSEIF NEW.quantity < 5 THEN
-        SET NEW.inventoryStatus = 'LOWSTOCK';
+        SET NEW.inventory_status = 'LOWSTOCK';
     ELSE
-        SET NEW.inventoryStatus = 'INSTOCK';
+        SET NEW.inventory_status = 'INSTOCK';
     END IF;
 END
 $$
