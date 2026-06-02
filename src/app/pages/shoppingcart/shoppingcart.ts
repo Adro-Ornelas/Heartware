@@ -170,16 +170,15 @@ export class Shoppingcart implements AfterViewInit {
                     // EXTRAEMOS LA UBICACIÓN DESTINO
                     // PayPal devuelve la dirección en purchase_units[0].shipping
                     const shippingInfo = capture.purchase_units[0].shipping;
-                    const address = shippingInfo.address;
-
                     const customerData = {
-                        nombre: shippingInfo.name.full_name,
-                        calle: address.address_line_1,
-                        ciudad: address.admin_area_2,
-                        estado: address.admin_area_1,
-                        codigoPostal: address.postal_code,
-                        pais: address.country_code
+                        nombre: shippingInfo?.name?.full_name ?? '',
+                        calle: shippingInfo?.address?.address_line_1 ?? '',
+                        ciudad: shippingInfo?.address?.admin_area_2 ?? '',
+                        estado: shippingInfo?.address?.admin_area_1 ?? '',
+                        codigoPostal: shippingInfo?.address?.postal_code ?? '',
+                        pais: shippingInfo?.address?.country_code ?? ''
                     };
+                    const address = shippingInfo.address;
 
                     // const customerData = this.cartService.getCustomerData();
                     const paypalData = {
@@ -197,8 +196,20 @@ export class Shoppingcart implements AfterViewInit {
                         id_user: idUser,
                         payment_method: 'Digital wallet',
                         paypal_status: paypalData.status,
+
+                        customer_name: customerData.nombre,
+                        street: customerData.calle,
+                        city: customerData.ciudad,
+                        state_address: customerData.estado,
+                        postal_code: customerData.codigoPostal,
+                        country: customerData.pais,
+
                         price: total,
-                        products: purchasedItems.map((item) => ({ id_product: item.id, quantity: Number(item.quantity || 1) }))
+
+                        products: purchasedItems.map(item => ({
+                            id_product: item.id,
+                            quantity: Number(item.quantity || 1)
+                        }))
                     }));
 
                     // PASAMOS LOS DATOS AL XML                    

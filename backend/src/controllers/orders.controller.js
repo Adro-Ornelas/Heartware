@@ -33,6 +33,14 @@ const getOrdersByUser = (req, res) => {
             o.state,
             o.date,
             o.price,
+
+            o.customer_name,
+            o.street,
+            o.city,
+            o.state_address,
+            o.postal_code,
+            o.country,
+
             p.id AS product_id,
             p.name AS product_name,
             p.price AS product_price,
@@ -50,6 +58,14 @@ const getOrdersByUser = (req, res) => {
             o.state,
             o.date,
             o.price,
+
+            o.customer_name,
+            o.street,
+            o.city,
+            o.state_address,
+            o.postal_code,
+            o.country,
+
             p.id,
             p.name,
             p.price,
@@ -68,14 +84,22 @@ const getOrdersByUser = (req, res) => {
         result.forEach((row) => {
             if (!ordersMap.has(row.id_order)) {
                 ordersMap.set(row.id_order, {
-                    id_order: row.id_order,
-                    id_user: row.id_user,
-                    payment_method: row.payment_method,
-                    state: row.state,
-                    date: row.date,
-                    price: row.price,
-                    products: []
-                });
+                id_order: row.id_order,
+                id_user: row.id_user,
+                payment_method: row.payment_method,
+                state: row.state,
+                date: row.date,
+                price: row.price,
+
+                customer_name: row.customer_name,
+                street: row.street,
+                city: row.city,
+                state_address: row.state_address,
+                postal_code: row.postal_code,
+                country: row.country,
+
+                products: []
+            });
             }
 
             if (row.product_id) {
@@ -103,6 +127,14 @@ const createOrder = (req, res) => {
     const price = Number(req.body.price);
     const products = Array.isArray(req.body.products) ? req.body.products : [];
 
+    // DATOS DE ENVÍO
+    const customerName = req.body.customer_name || '';
+    const street = req.body.street || '';
+    const city = req.body.city || '';
+    const stateAddress = req.body.state_address || '';
+    const postalCode = req.body.postal_code || '';
+    const country = req.body.country || '';
+
     if (!Number.isInteger(idUser) || idUser <= 0) {
         return res.status(400).json({ error: 'Usuario invalido' });
     }
@@ -125,8 +157,36 @@ const createOrder = (req, res) => {
             return res.status(500).json({ error: 'Error al iniciar la orden' });
         }
 
-        const orderSql = 'INSERT INTO orders (id_user, payment_method, state, price) VALUES (?, ?, ?, ?)';
-        db.query(orderSql, [idUser, paymentMethod, state, Math.round(price)], (orderError, orderResult) => {
+        const orderSql = `
+            INSERT INTO orders (
+                id_user,
+                payment_method,
+                state,
+                price,
+                customer_name,
+                street,
+                city,
+                state_address,
+                postal_code,
+                country
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            `;
+        db.query(
+        orderSql,
+            [
+                idUser,
+                paymentMethod,
+                state,
+                Math.round(price),
+
+                customerName,
+                street,
+                city,
+                stateAddress,
+                postalCode,
+                country
+            ], (orderError, orderResult) => {
             if (orderError) {
                 return db.rollback(() => res.status(500).json({ error: 'Error al guardar la orden' }));
             }

@@ -2,7 +2,6 @@ const db = require('../config/db');
 
 const sanitizeUser = (user) => ({
     id_user: user.id_user,
-    id_address: user.id_address,
     name: user.name,
     last_name: user.last_name,
     email: user.email,

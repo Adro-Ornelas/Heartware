@@ -63,23 +63,15 @@
                             <p class="profile-label">Correo</p>
                             <p class="profile-value">{{ currentUser.email }}</p>
                         </div>
-                        <div>
+                        <!-- <div>
                             <p class="profile-label">ID de usuario</p>
                             <p class="profile-value">#{{ currentUser.id_user }}</p>
-                        </div>
-                        <div>
-                            <p class="profile-label">Direccion</p>
-                            <p class="profile-value">{{ currentUser.id_address ? 'Direccion #' + currentUser.id_address
-                                : 'Se tomara desde PayPal al pagar' }}</p>
-                        </div>
-                        <div>
-                            <p class="profile-label">Historial</p>
-                            <p class="profile-value">Las ordenes nuevas se asociaran a esta cuenta.</p>
-                        </div>
+                        </div>-->
                     </div>
                 </section>
             </div>
             }
+            <br>
             <p-button icon="pi pi-sign-out" label="Cerrar sesión" severity="danger" [outlined]="true"
                 (onClick)="logout()">
             </p-button>
