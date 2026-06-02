@@ -1,37 +1,26 @@
 import { Routes } from '@angular/router';
 import { AppLayout } from './app/layout/component/app.layout';
-import { Catalog } from './app/pages/catalog/catalog';
 import { Notfound } from './app/notfound/notfound';
 import { authGuard } from './app/core/guard/guard';
 
 export const appRoutes: Routes = [
+    //  Rutas de la Aplicación Protegidas por el Cascarón (Layout)
     {
         path: '',
         component: AppLayout,
+        canActivate: [authGuard], // El Guard protege todo el Layout y sus páginas hijas
         children: [
-            // { path: 'pages/catalog', component: Catalog },
-            { path: '', redirectTo: '/auth/login', pathMatch: 'full' },
+            { path: '', redirectTo: 'pages/catalog', pathMatch: 'full' }, // Si está logueado va al catálogo
             { path: 'pages', loadChildren: () => import('./app/pages/pages.routes') },
         ]
     },
 
-    { path: 'auth', loadChildren: () => import('./app/pages/auth/auth.routes') },
+    //  Rutas Públicas (Fuera del Layout de la App)
+    {
+        path: 'auth',
+        loadChildren: () => import('./app/pages/auth/auth.routes')
+    },
+
     { path: 'notfound', component: Notfound },
     { path: '**', redirectTo: 'notfound' },
-
-
-    // {
-    //     path: 'login', loadComponent: () =>
-    //         import('./app/pages/auth/login/login').then(m => m.Login),
-    // },
-
-    // {
-    //     path: 'signup', loadComponent: () =>
-    //         import('./app/pages/auth/signup/signup').then(m => m.SignUp),
-    // },
-    // {
-    //     path: 'perfil',
-    //     canActivate: [authGuard],
-    //     // loadComponent: () => import('./pages/history/history').then(m => m.Hstory),
-    // }
 ];
