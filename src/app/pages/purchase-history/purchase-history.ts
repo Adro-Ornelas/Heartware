@@ -28,7 +28,15 @@ export class PurchaseHistory {
         this.loading.set(true);
         this.error.set('');
 
-        this.ordersService.getOrdersByUser(this.ordersService.getCurrentUserId()).subscribe({
+        const idUser = this.ordersService.getCurrentUserId();
+
+        if (!idUser) {
+            this.error.set('Debes iniciar sesión.');
+            this.loading.set(false);
+            return;
+        }
+
+        this.ordersService.getOrdersByUser(idUser).subscribe({
             next: (orders) => {
                 this.orders.set(orders);
                 this.loading.set(false);

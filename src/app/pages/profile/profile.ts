@@ -8,7 +8,7 @@ import { PasswordModule } from 'primeng/password';
 import { TagModule } from 'primeng/tag';
 import { User, UpdateUserPayload } from '@/app/models/user.model';
 import { UsersService } from '@/app/services/users.service';
-
+import { Router } from '@angular/router';
 @Component({
     selector: 'app-profile',
     standalone: true,
@@ -19,7 +19,7 @@ import { UsersService } from '@/app/services/users.service';
 
 export class Profile {
     private usersService = inject(UsersService);
-
+    private router = inject(Router);
     user = signal<User | null>(null);
     loading = signal(false);
     saving = signal(false);
@@ -44,14 +44,25 @@ export class Profile {
         this.error.set('');
         this.success.set('');
 
-        this.usersService.getUser(this.usersService.getCurrentUserId()).subscribe({
+        const idUser = this.usersService.getCurrentUserId();
+
+        if (!idUser) {
+            this.loading.set(false);
+            this.router.navigate(['/login']);
+            return;
+        }
+
+        this.usersService.getUser(idUser).subscribe({
             next: (user) => {
                 this.user.set(user);
                 this.loading.set(false);
             },
             error: () => {
-                this.error.set('No se encontro el usuario activo. Crea el usuario con id 1 en la base de datos para continuar.');
+                this.error.set('No se encontró el usuario activo.');
                 this.loading.set(false);
+
+                // Opcional: si el usuario ya no existe en BD
+                this.usersService.logout();
             }
         });
     }
@@ -106,5 +117,8 @@ export class Profile {
                 this.saving.set(false);
             }
         });
+    }
+    logout() {
+        this.usersService.logout();
     }
 }

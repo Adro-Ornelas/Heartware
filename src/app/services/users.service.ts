@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Observable, tap } from 'rxjs';
 import { UpdateUserPayload, User } from '../models/user.model';
+import { Router } from '@angular/router';
 
 @Injectable({
     providedIn: 'root'
@@ -9,12 +10,18 @@ import { UpdateUserPayload, User } from '../models/user.model';
 export class UsersService {
     private http = inject(HttpClient);
     private base = this.resolveApiBase();
+    private router = inject(Router);
 
-    getCurrentUserId(): number {
-        const storedUserId = localStorage.getItem('id_user') || localStorage.getItem('userId');
+    getCurrentUserId(): number | null {
+        const storedUserId =
+            localStorage.getItem('id_user') ||
+            localStorage.getItem('userId');
+
         const idUser = Number(storedUserId);
 
-        return Number.isInteger(idUser) && idUser > 0 ? idUser : 1;
+        return Number.isInteger(idUser) && idUser > 0
+            ? idUser
+            : null;
     }
 
     setCurrentUserId(idUser: number) {
@@ -41,5 +48,21 @@ export class UsersService {
         }
 
         return '/api';
+    }
+
+    logout(): void {
+        localStorage.removeItem('id_user');
+        localStorage.removeItem('userId');
+
+        // Si guardas más cosas relacionadas con la sesión:
+        // localStorage.removeItem('token');
+        // localStorage.removeItem('user');
+
+        this.router.navigate(['/login']);
+    }
+
+    isLoggedIn(): boolean {
+        const id = Number(localStorage.getItem('id_user'));
+        return Number.isInteger(id) && id > 0;
     }
 }

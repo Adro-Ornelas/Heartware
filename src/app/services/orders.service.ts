@@ -28,7 +28,7 @@ export class OrdersService {
         return this.http.post<PurchaseOrder>(`${this.base}/orders`, payload);
     }
 
-    getCurrentUserId(): number {
+    getCurrentUserId(): number | null {
         return this.usersService.getCurrentUserId();
     }
 

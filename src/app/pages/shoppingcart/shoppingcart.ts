@@ -187,14 +187,20 @@ export class Shoppingcart implements AfterViewInit {
                         status: capture.status || 'COMPLETED'
                     };
 
+                    const idUser = this.ordersService.getCurrentUserId();
+
+                    if (!idUser) {
+                        this.error.set('Debes iniciar sesión para realizar una compra.');
+                        return;
+                    }
                     await lastValueFrom(this.ordersService.createOrder({
-                        id_user: this.ordersService.getCurrentUserId(),
+                        id_user: idUser,
                         payment_method: 'Digital wallet',
                         paypal_status: paypalData.status,
                         price: total,
                         products: purchasedItems.map((item) => ({ id_product: item.id, quantity: Number(item.quantity || 1) }))
                     }));
-                    
+
                     // PASAMOS LOS DATOS AL XML                    
                     this.cartService.exportXML(customerData, paypalData);
 
