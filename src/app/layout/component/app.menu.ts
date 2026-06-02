@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MenuItem } from 'primeng/api';
 import { AppMenuitem } from './app.menuitem';
+import { UsersService } from '@/app/services/users.service';
 
 @Component({
     selector: 'app-menu',
@@ -18,127 +19,47 @@ import { AppMenuitem } from './app.menuitem';
         }
     </ul> `
 })
-export class AppMenu {
+export class AppMenu implements OnInit {
     model: MenuItem[] = [];
+    private usersService = inject(UsersService); // Inyectamos el servicio
 
     ngOnInit() {
+        this.updateMenu();
+    }
+
+    updateMenu() {
+        const isAdmin = this.usersService.getUserType() === 'admin';
+        const isLoggedIn = this.usersService.isLoggedIn();
+
         this.model = [
             {
-                // label: 'Carrito'
                 items: [
-                    {
-                        label: 'Catálogo',
-                        icon: 'pi pi-fw pi-home',
-                        // icon: 'pi pi-fw pi-table',
-                        routerLink: ['/pages/catalog']
-                    },
-                    {
-                        label: 'Carrito',
-                        icon: 'pi pi-fw pi-shopping-cart',
-                        routerLink: ['/pages/shoppingcart']
-                    },
-                    {
-                        label: 'Historial',
-                        icon: 'pi pi-fw pi-history',
-                        routerLink: ['/pages/purchase-history']
-                    },
-                    {
-                        label: 'Perfil',
-                        icon: 'pi pi-fw pi-user',
-                        routerLink: ['/pages/profile']
-                    },
-
+                    { label: 'Catálogo', icon: 'pi pi-fw pi-home', routerLink: ['/pages/catalog'] },
+                    { label: 'Carrito', icon: 'pi pi-fw pi-shopping-cart', routerLink: ['/pages/shoppingcart'] },
+                    { label: 'Historial', icon: 'pi pi-fw pi-history', routerLink: ['/pages/purchase-history'] },
+                    { label: 'Perfil', icon: 'pi pi-fw pi-user', routerLink: ['/pages/profile'] },
+                    
+                    // Lógica para ocultar: si no es admin, establecemos visible en false
                     {
                         label: 'Admin Productos',
                         icon: 'pi pi-fw pi-pencil',
-                        routerLink: ['/pages/crud/products/']
+                        routerLink: ['/pages/crud/products/'],
+                        visible: isAdmin // Se oculta automáticamente si no es admin
                     },
                     {
                         label: 'Admin Usuarios',
                         icon: 'pi pi-fw pi-users',
-                        routerLink: ['/pages/crud/users/']
+                        routerLink: ['/pages/crud/users/'],
+                        visible: isAdmin
                     },
                     {
                         label: 'Admin Ordenes',
                         icon: 'pi pi-fw pi-book',
-                        routerLink: ['/pages/crud/orders/']
-                    },
+                        routerLink: ['/pages/crud/orders/'],
+                        visible: isAdmin
+                    }
                 ]
-            },
-            
-            // {
-            //     label: 'Home',
-            //     items: [{ label: 'Dashboard', icon: 'pi pi-fw pi-home',  }]
-            // },
-            // {
-            //     label: 'UI Components',
-            //     items: [
-            //         { label: 'Form Layout', icon: 'pi pi-fw pi-id-card', routerLink: ['/uikit/formlayout'] },
-            //         { label: 'Input', icon: 'pi pi-fw pi-check-square', routerLink: ['/uikit/input'] },
-            //         { label: 'Button', icon: 'pi pi-fw pi-mobile', class: 'rotated-icon', routerLink: ['/uikit/button'] },
-            //         { label: 'Table', icon: 'pi pi-fw pi-table', routerLink: ['/uikit/table'] },
-            //         { label: 'List', icon: 'pi pi-fw pi-list', routerLink: ['/uikit/list'] },
-            //         { label: 'Tree', icon: 'pi pi-fw pi-share-alt', routerLink: ['/uikit/tree'] },
-            //         { label: 'Panel', icon: 'pi pi-fw pi-tablet', routerLink: ['/uikit/panel'] },
-            //         { label: 'Overlay', icon: 'pi pi-fw pi-clone', routerLink: ['/uikit/overlay'] },
-            //         { label: 'Media', icon: 'pi pi-fw pi-image', routerLink: ['/uikit/media'] },
-            //         { label: 'Menu', icon: 'pi pi-fw pi-bars', routerLink: ['/uikit/menu'] },
-            //         { label: 'Message', icon: 'pi pi-fw pi-comment', routerLink: ['/uikit/message'] },
-            //         { label: 'File', icon: 'pi pi-fw pi-file', routerLink: ['/uikit/file'] },
-            //         { label: 'Chart', icon: 'pi pi-fw pi-chart-bar', routerLink: ['/uikit/charts'] },
-            //         { label: 'Timeline', icon: 'pi pi-fw pi-calendar', routerLink: ['/uikit/timeline'] },
-            //         { label: 'Misc', icon: 'pi pi-fw pi-circle', routerLink: ['/uikit/misc'] }
-            //     ]
-            // },
-            // {
-            //     label: 'Pages',
-            //     icon: 'pi pi-fw pi-briefcase',
-            //     path: '/pages',
-            //     items: [
-            //         {
-            //             label: 'Landing',
-            //             icon: 'pi pi-fw pi-globe',
-            //             routerLink: ['/landing']
-            //         },
-            //         {
-            //             label: 'Auth',
-            //             icon: 'pi pi-fw pi-user',
-            //             path: '/auth',
-            //             items: [
-            //                 {
-            //                     label: 'Login',
-            //                     icon: 'pi pi-fw pi-sign-in',
-            //                     routerLink: ['/auth/login']
-            //                 },
-            //                 {
-            //                     label: 'Error',
-            //                     icon: 'pi pi-fw pi-times-circle',
-            //                     routerLink: ['/auth/error']
-            //                 },
-            //                 {
-            //                     label: 'Access Denied',
-            //                     icon: 'pi pi-fw pi-lock',
-            //                     routerLink: ['/auth/access']
-            //                 }
-            //             ]
-            //         },
-            //         {
-            //             label: 'Crud',
-            //             icon: 'pi pi-fw pi-pencil',
-            //             routerLink: ['/pages/crud']
-            //         },
-            //         {
-            //             label: 'Not Found',
-            //             icon: 'pi pi-fw pi-exclamation-circle',
-            //             routerLink: ['/pages/notfound']
-            //         },
-            //         {
-            //             label: 'Empty',
-            //             icon: 'pi pi-fw pi-circle-off',
-            //             routerLink: ['/pages/empty']
-            //         }
-                // ]
-            // },
+            }
         ];
     }
 }

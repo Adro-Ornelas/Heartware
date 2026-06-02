@@ -27,6 +27,10 @@ export class AuthService {
     saveUserId(id: number): void {
         localStorage.setItem('id_user', id.toString());
     }
+    saveUserType(type: string): void {
+        localStorage.setItem('user_type', type);
+    }
+    
 
     getUserId(): number | null {
         const id = localStorage.getItem('id_user');

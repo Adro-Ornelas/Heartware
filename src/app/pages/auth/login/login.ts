@@ -77,6 +77,8 @@ export class Login {
                 console.log(res);
                 this.authService.saveToken(res.token);
                 this.authService.saveUserId(res.user.id_user);
+                this.authService.saveUserType(res.user.type); // Guardamos el rol del usuario
+                
                 // Al estar autenticado, navegamos al catálogo dentro del Shell protegido
                 this.router.navigate(['/pages/catalog']);
             },

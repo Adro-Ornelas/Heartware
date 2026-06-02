@@ -16,7 +16,7 @@ export class UsersService {
         const storedUserId =
             localStorage.getItem('id_user') ||
             localStorage.getItem('userId');
-        
+
         const idUser = Number(storedUserId);
 
         return Number.isInteger(idUser) && idUser > 0
@@ -58,7 +58,7 @@ export class UsersService {
     deleteUser(idUser: number): Observable<void> {
         return this.http.delete<void>(`${this.base}/users/${idUser}`);
     }
-    
+
 
     private resolveApiBase(): string {
         try {
@@ -73,10 +73,17 @@ export class UsersService {
 
         return '/api';
     }
+    getUserType(): string | null {
+        return localStorage.getItem('user_type');
+    }
+    setUserType(type: string) {
+        localStorage.setItem('user_type', type);
+    }
 
     logout(): void {
         localStorage.removeItem('id_user');
         localStorage.removeItem('userId');
+        localStorage.removeItem('user_type'); // Limpia el rol
         this.router.navigate(['/auth/login']);
     }
 
