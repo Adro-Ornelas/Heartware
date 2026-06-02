@@ -10,7 +10,7 @@ export class ProductService {
     private http = inject(HttpClient);
     private apiUrl = `http://localhost:3000/api/products`;
 
-    // 1. Obtener todos los productos (Mapeo de Entrada)
+    // Obtener todos los productos (Mapeo de Entrada)
     getProducts(): Observable<Product[]> {
         return this.http.get<any[]>(this.apiUrl).pipe(
             //         map(dbProducts => dbProducts.map(dbItem => {

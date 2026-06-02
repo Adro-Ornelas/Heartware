@@ -58,7 +58,6 @@ export class Catalog {
         }, this.animationDuration);
     }
 
-
     getSeverity(product: Product) {
         // Limpiamos el texto por si viene con alguna variación de la BD
         const status = (product.inventoryStatus || '').toUpperCase().trim();
