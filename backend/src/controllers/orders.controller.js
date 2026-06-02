@@ -125,7 +125,7 @@ const getOrdersByUser = async (req, res) => {
         const orders = Array.from(ordersMap.values());
 
         orders.forEach((order, index) => {
-            order.user_order_number = index + 1;
+            order.user_order_number = orders.length - index;
         });
 
         res.json(orders);
