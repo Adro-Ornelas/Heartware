@@ -6,6 +6,7 @@ import { ProductDetail } from './product-detail/product-detail';
 import { TermsConditions } from './terms-conditions/terms-conditions';
 import { PurchaseHistory } from './purchase-history/purchase-history';
 import { CrudProducts as CrudProducts } from './crud/products/products.crud';
+import { CrudUsers } from './crud/users/users.crud';
 
 export default [
     { path: 'catalog', component: Catalog },
@@ -15,5 +16,6 @@ export default [
     { path: 'product/:id', component: ProductDetail },
     { path: 'terms-conditions', component: TermsConditions},
     {path:  'crud/products', component: CrudProducts},
+    {path:  'crud/users', component: CrudUsers},
     { path: '**', redirectTo: '/notfound' },
 ] as Routes;
