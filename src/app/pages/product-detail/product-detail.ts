@@ -11,11 +11,15 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LottieComponent } from 'ngx-lottie';
 import { MiniCart } from '../mini-cart/mini-cart';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
 @Component({
     selector: 'app-product-detail',
-        standalone: true,
-        imports: [CommonModule, InputNumberModule, ButtonModule, FormsModule, LottieComponent, MiniCart],
-    templateUrl: './product-detail.html'
+    standalone: true,
+    imports: [CommonModule, InputNumberModule, ButtonModule, FormsModule, LottieComponent, MiniCart,DialogModule, ToastModule],
+    templateUrl: './product-detail.html',
+    providers: [MessageService]
 })
 export class ProductDetail {
 
@@ -32,7 +36,8 @@ export class ProductDetail {
         private route: ActivatedRoute,
         private productService: ProductService,
         private cartService: ShoppingCartService,
-        private router: Router
+        private router: Router,
+        private messageService: MessageService
     ) { }
 
     ngOnInit() {
@@ -44,16 +49,32 @@ export class ProductDetail {
     }
 
     addToCart(product: Product) {
-         this.showOverlay = true;
-        const quantityToAdd = this.quantity;
 
-        for (let i = 0; i < quantityToAdd; i++) {
+        const alreadyInCart =
+            this.cartService.getQuantity(product.id);
+
+        if (
+            alreadyInCart + this.quantity >
+            product.quantity
+        ) {
+            this.messageService.add({ 
+                severity: 'warn', 
+                summary: 'Límite alcanzado', 
+                detail: `No puedes agregar más de ${product.quantity} unidades.` 
+            });
+
+            return;
+        }
+
+        for (let i = 0; i < this.quantity; i++) {
             this.cartService.add(product);
         }
 
+        this.showOverlay = true;
+
         setTimeout(() => {
-            this.router.navigate(['/pages/shoppingcart']);
-        }, this.overlayDuration); 
+            this.showOverlay = false;
+        }, this.overlayDuration);
     }
 
 }

@@ -1,4 +1,5 @@
 <app-mini-cart></app-mini-cart>
+<p-toast></p-toast>
 <div class="flex flex-col"></div>
 <div class="flex flex-col">
     <div class="card">
@@ -47,7 +48,8 @@
 
                                         <p-button *ngIf="!isInCart(item) && !isAnimating(item)"
                                             label="Agregar al carrito" icon="pi pi-shopping-cart"
-                                            styleClass="w-full p-button-danger" (onClick)="add(item)">
+                                            styleClass="w-full p-button-danger"
+                                            [disabled]="item.inventoryStatus === 'OUTOFSTOCK'" (onClick)="add(item)">
                                         </p-button>
 
                                         <div *ngIf="isAnimating(item)"
@@ -68,7 +70,9 @@
                                                 {{ getQuantity(item) }}
                                             </span>
 
-                                            <p-button icon="pi pi-plus" (onClick)="increase(item)"></p-button>
+                                            <p-button icon="pi pi-plus" [disabled]="getQuantity(item) >= item.quantity"
+                                                (onClick)="increase(item)">
+                                            </p-button>
 
                                         </div>
 

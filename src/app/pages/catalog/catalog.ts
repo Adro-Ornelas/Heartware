@@ -20,22 +20,36 @@ import { MiniCart } from '../mini-cart/mini-cart';
 @Component({
     selector: 'app-catalog',
     standalone: true,
-    imports: [CommonModule, DataViewModule, FormsModule, SelectButtonModule, TagModule, ButtonModule, 
+    imports: [CommonModule, DataViewModule, FormsModule, SelectButtonModule, TagModule, ButtonModule,
         TableModule, ToastModule, RouterModule, DialogModule, LottieComponent, MiniCart],
     templateUrl: './catalog.html',
     styleUrls: ['./catalog.css'],
-    providers: [ProductService, MessageService]
+    providers: [MessageService]
 })
 export class Catalog {
     showSuccess = false;
     // products: Product[] = []; Versión vieja, necesita ser Observable para cargar correctamente
     products$: Observable<Product[]>;
 
-    constructor(private productService: ProductService, private shoppingCartService: ShoppingCartService) {
+    constructor(private productService: ProductService, private shoppingCartService: ShoppingCartService, private messageService: MessageService) {
         this.products$ = this.productService.getProducts();
     }
 
     add(product: Product) {
+        // 1. Verificamos cuántos hay en el carrito actualmente
+        const alreadyInCart = this.shoppingCartService.getQuantity(product.id);
+
+        // 2. Validamos contra el stock de la base de datos
+        if (alreadyInCart >= product.quantity) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Stock máximo',
+                detail: `Solo hay ${product.quantity} unidades disponibles de ${product.name}`
+            });
+            return; // Detenemos la ejecución aquí
+        }
+
+        // 3. Si hay stock, procedemos con la animación y agregamos al carrito
         this.animatingId = product.id;
 
         setTimeout(() => {
@@ -72,18 +86,21 @@ export class Catalog {
     }
 
     getSeverity(product: Product) {
-        switch (product.inventoryStatus) {
+        // Limpiamos el texto por si viene con alguna variación de la BD
+        const status = (product.inventoryStatus || '').toUpperCase().trim();
+
+        switch (status) {
             case 'INSTOCK':
-                return 'success';
+                return 'success'; // Verde
 
             case 'LOWSTOCK':
-                return 'warn';
+                return 'warn';    // Amarillo
 
             case 'OUTOFSTOCK':
-                return 'danger';
+                return 'danger';  // Rojo
 
             default:
-                return 'info';
+                return 'info';    // Azul 
         }
     }
 
@@ -108,11 +125,36 @@ export class Catalog {
     }
 
     increase(product: Product) {
-        this.shoppingCartService.increase(product.id);
+        // 1. Consultamos cuánto lleva el usuario agregado de este producto
+        const alreadyInCart = this.getQuantity(product);
+
+        // 2. Si ya alcanzó o superó el stock de la base de datos, mostramos Toast y frenamos
+        if (alreadyInCart >= product.quantity) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Stock máximo',
+                detail: `Solo hay ${product.quantity} unidades disponibles de ${product.name}`
+            });
+            return;
+        }
+
+        // 3. Si tiene disponibilidad, incrementamos
+        this.shoppingCartService.increase(product.id, product.quantity);
     }
+
 
     decrease(product: Product) {
         this.shoppingCartService.decrease(product.id);
+    }
+
+    getInventoryStatus(product: Product): 'INSTOCK' | 'LOWSTOCK' | 'OUTOFSTOCK' {
+        if (product.quantity <= 0) {
+            return 'OUTOFSTOCK';
+        }
+        if (product.quantity < 5) {
+            return 'LOWSTOCK';
+        }
+        return 'INSTOCK';
     }
 
 

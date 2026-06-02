@@ -209,10 +209,33 @@ const createOrder = async (req, res) => {
             }
         });
 
+
         await connection.query(
             'INSERT INTO products_orders (id_order, id_product) VALUES ?',
             [rows]
         );
+        for (const product of products) {
+            // Asegúrate de usar la propiedad correcta según lo que mande tu frontend (id_product o id)
+            const idProduct = Number(product.id_product || product.id);
+            const quantityPurchased = Math.max(1, Number(product.quantity) || 1);
+
+            const [updateResult] = await connection.query(
+                `UPDATE products 
+         SET quantity = quantity - ?,
+             inventoryStatus = CASE 
+                 WHEN (quantity - ?) <= 0 THEN 'OUTOFSTOCK'
+                 WHEN (quantity - ?) <= 5 THEN 'LOWSTOCK' 
+                 ELSE 'INSTOCK'
+             END
+         WHERE id = ? AND quantity >= ?`,
+                [quantityPurchased, quantityPurchased, quantityPurchased, idProduct, quantityPurchased]
+            );
+
+            // Validación de seguridad: si affectedRows es 0, significa que no había suficiente stock en BD
+            if (updateResult.affectedRows === 0) {
+                throw new Error(`Stock insuficiente para el producto ID: ${idProduct}`);
+            }
+        }
 
         await connection.commit();
 

@@ -2,7 +2,6 @@ import { AfterViewInit, Component, computed, inject, OnInit, signal, Signal } fr
 import { CommonModule, CurrencyPipe } from '@angular/common';
 import { Product } from '@/app/models/product.model';
 import { ShoppingCartService } from '../../services/shoppingcart.service';
-// import { PaypalService } from '@/app/services/paypal.service';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { FormsModule } from '@angular/forms';
 import { PaymentService, CreatePaypalOrderPayload } from '../../services/payment.service';
@@ -10,6 +9,9 @@ import { lastValueFrom } from 'rxjs';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { OrdersService } from '@/app/services/orders.service';
+import { ProductService } from '@/app/services/products.service'; // <--- Para consultar el stock real
+import { MessageService } from 'primeng/api'; // <--- Para controlar los Toasts
+import { ToastModule } from 'primeng/toast'; // <--- Módulo del Toast
 
 @Component({
     selector: 'app-shoppingcart',
@@ -17,42 +19,75 @@ import { OrdersService } from '@/app/services/orders.service';
     imports: [
         CurrencyPipe,
         InputNumberModule,
-        // Needed for inputNumber
         FormsModule,
         CommonModule,
-
         DialogModule,
-        ButtonModule
+        ButtonModule,
+        ToastModule // <--- Agregado a los imports del componente standalone
     ],
     templateUrl: './shoppingcart.html',
-    styleUrl: './shoppingcart.scss'
+    styleUrl: './shoppingcart.scss',
+    providers: [MessageService] // <--- Proveedor local requerido por PrimeNG para los Toasts
 })
-export class Shoppingcart implements AfterViewInit {
+export class Shoppingcart implements OnInit, AfterViewInit {
     loading = signal(false);
     success = signal(false);
     error = signal('');
 
     private shoppingCartService = inject(ShoppingCartService);
-    // private paypalService = inject(PaypalService);
+    private productService = inject(ProductService); // <--- Inyectado
+    private messageService = inject(MessageService); // <--- Inyectado
 
-    // Boolean variable to control the succes dialog visibility
     displaySuccessDialog: boolean = false;
+    public inputNumberValue: any = null;
+
+    // Arreglo local para almacenar temporalmente las existencias reales del backend
+    private productosInventario: Product[] = [];
+
+    cart: Signal<Product[]> = this.shoppingCartService.products;
+    total = computed(() => this.shoppingCartService.total());
 
     constructor(private cartService: ShoppingCartService, private paymentService: PaymentService, private ordersService: OrdersService) { }
 
-    public inputNumberValue: any = null;
+    ngOnInit(): void {
+        // Cargar el stock real desde la base de datos al inicializar la vista
+        this.productService.getProducts().subscribe({
+            next: (data) => {
+                this.productosInventario = data;
+            },
+            error: (err) => console.error('Error cargando inventario de validación: ', err)
+        });
 
-    cart: Signal<Product[]> = this.shoppingCartService.products;
+        // Corrección del Signal: se invoca como función () para leer su length correctamente
+        if (this.cart().length === 0) {
+            this.error.set('El carrito está vacío. Agrega productos antes de pagar.');
+            return;
+        }
+    }
 
-    total = computed(() => this.shoppingCartService.total());
-
-    // ------------------NGX-PAYPAL---------------------------    
-
-    // Intercepta el cambio y actualiza el signal correctamente
+    ngAfterViewInit() {
+        this.loadPayPal();
+    }
     onQuantityChange(item: Product, newQuantity: number) {
         if (newQuantity !== null && newQuantity > 0) {
-            this.shoppingCartService.updateQuantity(item.id, newQuantity);
+            const productoOriginal = this.productosInventario.find(p => p.id === item.id);
+            const stockMaximo = productoOriginal ? productoOriginal.quantity : Infinity;
+
+            if (newQuantity >= stockMaximo) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Stock máximo superado',
+                    detail: `Solo quedan ${stockMaximo} unidades disponibles de ${item.name}.`
+                });
+                this.shoppingCartService.updateQuantity(item.id, stockMaximo);
+            } else {
+                this.shoppingCartService.updateQuantity(item.id, newQuantity);
+            }
         }
+    }
+    getMaxStock(productId: number): number {
+        const productoOriginal = this.productosInventario.find(p => p.id === productId);
+        return productoOriginal ? productoOriginal.quantity : Infinity;
     }
 
     removeProduct(id: number) {
@@ -63,43 +98,25 @@ export class Shoppingcart implements AfterViewInit {
         this.shoppingCartService.empty();
     }
 
-    ngOnInit(): void {
-
-        if (this.cart.length === 0) {
-            this.error.set('El carrito está vacío. Agrega productos antes de pagar.');
-            return;
-        }
-        // this.loadPayPal();
-    }
-
-    ngAfterViewInit() {
-        this.loadPayPal();
-    }
-
-    // Refactorizamos el constructor del Payload
     private buildOrderPayload(): any {
         const currentCart = this.cart();
 
-        // Mapeamos los productos EXACTAMENTE como lo pide la interfaz de tu Backend
         const backendItems = currentCart.map(item => ({
             nombre: item.name.substring(0, 127),
             cantidad: Number(item.quantity || 1),
             precio: Number(item.price)
         }));
 
-        // Calculamos el total exacto basado en estos items para evitar el error de PayPal
         const exactPaypalTotal = backendItems.reduce((suma, item) => {
             return suma + (item.precio * item.cantidad);
         }, 0).toFixed(2);
 
-        // 3. Enviamos al backend la estructura simple que él está esperando
         return {
             total: exactPaypalTotal,
             items: backendItems
         };
     }
 
-    // El resto de tu código se mantiene limpio y manejando errores
     private async loadPayPal() {
         try {
             const { clientId } = await lastValueFrom(this.paymentService.getClientId());
@@ -149,11 +166,10 @@ export class Shoppingcart implements AfterViewInit {
         }
 
         paypal.Buttons({
-            // Se eliminó style, pero puedes agregarlo si quieres personalizar el botón
             createOrder: async (_data: any, _actions: any) => {
                 this.loading.set(true);
                 try {
-                    const payload = this.buildOrderPayload(); // Generamos el payload serializado
+                    const payload = this.buildOrderPayload();
                     const resp = await lastValueFrom(this.paymentService.createOrder(payload));
                     return resp.id;
                 } finally {
@@ -167,8 +183,6 @@ export class Shoppingcart implements AfterViewInit {
                     const total = this.total();
                     const capture = await lastValueFrom(this.paymentService.captureOrder(data.orderID));
 
-                    // EXTRAEMOS LA UBICACIÓN DESTINO
-                    // PayPal devuelve la dirección en purchase_units[0].shipping
                     const shippingInfo = capture.purchase_units[0].shipping;
                     const customerData = {
                         nombre: shippingInfo?.name?.full_name ?? '',
@@ -178,9 +192,7 @@ export class Shoppingcart implements AfterViewInit {
                         codigoPostal: shippingInfo?.address?.postal_code ?? '',
                         pais: shippingInfo?.address?.country_code ?? ''
                     };
-                    const address = shippingInfo.address;
 
-                    // const customerData = this.cartService.getCustomerData();
                     const paypalData = {
                         orderId: data.orderID,
                         status: capture.status || 'COMPLETED'
@@ -196,27 +208,21 @@ export class Shoppingcart implements AfterViewInit {
                         id_user: idUser,
                         payment_method: 'Digital wallet',
                         paypal_status: paypalData.status,
-
                         customer_name: customerData.nombre,
                         street: customerData.calle,
                         city: customerData.ciudad,
                         state_address: customerData.estado,
                         postal_code: customerData.codigoPostal,
                         country: customerData.pais,
-
                         price: total,
-
                         products: purchasedItems.map(item => ({
                             id_product: item.id,
                             quantity: Number(item.quantity || 1)
                         }))
                     }));
 
-                    // PASAMOS LOS DATOS AL XML                    
                     this.cartService.exportXML(customerData, paypalData);
-
                     this.displaySuccessDialog = true;
-
                     this.cartService.empty();
 
                 } catch (err: any) {

@@ -8,27 +8,55 @@ export class ShoppingCartService {
 
 
     updateQuantity(id: number, newQuantity: number) {
-        this.productosSignal.update(items =>
-            items.map(item =>
-                item.id === id ? { ...item, quantity: newQuantity } : item
-            )
-        );
-    }
+    this.productosSignal.update(items =>
+        items.map(item => {
+            if (item.id !== id) {
+                return item;
+            }
+            return {
+                ...item,
+                // Dejamos que asigne la nueva cantidad de forma limpia (mínimo 1)
+                quantity: Math.max(newQuantity, 1) 
+            };
+        })
+    );
+}
     add(producto: Product) {
         this.productosSignal.update(lista => {
+
             const index = lista.findIndex(p => p.id === producto.id);
 
             if (index !== -1) {
-                // ya existe → incrementa
+
+                const currentQty = lista[index].quantity || 1;
+
+                // No permitir superar existencias
+                if (currentQty >= producto.quantity) {
+                    return lista;
+                }
+
                 const updated = [...lista];
+
                 updated[index] = {
                     ...updated[index],
-                    quantity: (updated[index].quantity || 1) + 1
+                    quantity: currentQty + 1
                 };
+
                 return updated;
             }
 
-            return [...lista, { ...producto, quantity: 1 }];
+            // Si no hay stock no agregar
+            if (producto.quantity <= 0) {
+                return lista;
+            }
+
+            return [
+                ...lista,
+                {
+                    ...producto,
+                    quantity: 1
+                }
+            ];
         });
     }
     removeProduct(id: number) {
@@ -40,8 +68,6 @@ export class ShoppingCartService {
 
     total(): number {
         return this.productosSignal().reduce((suma, producto) => {
-            // Convertimos explícitamente el precio a número.
-            // Si por alguna razón viene undefined o null, el || 0 evita que explote.
             const precio = Number(producto.price) * Number(producto.quantity) || 0;
 
             return suma + precio;
@@ -56,9 +82,12 @@ export class ShoppingCartService {
         return this.productosSignal().find(p => p.id === id)?.quantity || 0;
     }
 
-    increase(id: number) {
-        this.updateQuantity(id, this.getQuantity(id) + 1);
+    increase(id: number, maxStock: number) {
+    const current = this.getQuantity(id);
+    if (current < maxStock) {
+        this.updateQuantity(id, current + 1);
     }
+}
 
     decrease(id: number) {
         const current = this.getQuantity(id);
@@ -83,10 +112,10 @@ export class ShoppingCartService {
         const nombreReceptor = customer?.nombre ? this.escapeXml(customer.nombre).toUpperCase() : "PUBLICO EN GENERAL";
         const cpReceptor = customer?.codigoPostal || "00000";
         const calle = customer?.calle ? this.escapeXml(customer.calle) : "DESCONOCIDO";
-        
-        const ciudad = customer?.ciudad ? this.escapeXml(customer.ciudad) : "DESCONOCIDO";        
+
+        const ciudad = customer?.ciudad ? this.escapeXml(customer.ciudad) : "DESCONOCIDO";
         const pais = customer?.pais ? this.escapeXml(customer.pais) : "DESCONOCIDO";
-        
+
         // TESTING
         console.log(calle, ' ', cpReceptor, ' ', ciudad, ' ', pais);
 
