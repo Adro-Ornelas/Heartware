@@ -30,8 +30,7 @@ export class AppMenu {
                         label: 'Catálogo',
                         icon: 'pi pi-fw pi-home',
                         // icon: 'pi pi-fw pi-table',
-                        routerLink: ['/']
-                        // routerLink: ['/pages/catalog'] // TESTING
+                        routerLink: ['/pages/catalog']
                     },
                     {
                         label: 'Carrito',
