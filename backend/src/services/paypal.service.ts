@@ -23,6 +23,8 @@ function getBasicAuth(): string {
  * Obtiene el token de acceso temporal de PayPal.
  */
 export async function getAccessToken(): Promise<string> {
+  console.log('PAYPAL CONFIG');
+  console.log(paypalConfig);
   const response = await fetch(`${paypalConfig.baseUrl}/v1/oauth2/token`, {
     method: 'POST',
     headers: {
@@ -33,6 +35,8 @@ export async function getAccessToken(): Promise<string> {
   });
 
   const data = await response.json();
+  console.log('TOKEN RESPONSE');
+  console.log(data);
 
   if (!response.ok) {
     throw new Error(`Error obteniendo access token: ${JSON.stringify(data)}`);
@@ -45,8 +49,10 @@ export async function getAccessToken(): Promise<string> {
  * Crea una orden de pago enviando los detalles del carrito.
  */
 export async function createPaypalOrder(orderData: CreatePaypalOrderPayload): Promise<unknown> {
+  console.log('ORDER DATA');
+  console.log(JSON.stringify(orderData, null, 2));
   const accessToken = await getAccessToken();
-
+  console.log('TOKEN OBTENIDO');
   const body = {
     intent: 'CAPTURE',
     purchase_units: [

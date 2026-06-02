@@ -57,6 +57,16 @@ import { LayoutService } from '@/app/layout/service/layout.service';
             <div class="layout-topbar-menu hidden lg:block">
                 <div class="layout-topbar-menu-content">
                     <button type="button" class="layout-topbar-action"
+                    routerLink="/pages/purchase-history">
+                        <i class="pi pi-history"></i>
+                        <span>Historial</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="layout-topbar-menu hidden lg:block">
+                <div class="layout-topbar-menu-content">
+                    <button type="button" class="layout-topbar-action"
                     routerLink="/pages/profile">
                         <i class="pi pi-user"></i>
                         <span>Profile</span>

@@ -9,6 +9,7 @@ import { PaymentService, CreatePaypalOrderPayload } from '../../services/payment
 import { lastValueFrom } from 'rxjs';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { OrdersService } from '@/app/services/orders.service';
 
 @Component({
     selector: 'app-shoppingcart',
@@ -37,7 +38,7 @@ export class Shoppingcart implements AfterViewInit {
     // Boolean variable to control the succes dialog visibility
     displaySuccessDialog: boolean = false;
 
-    constructor(private cartService: ShoppingCartService, private paymentService: PaymentService) { }
+    constructor(private cartService: ShoppingCartService, private paymentService: PaymentService, private ordersService: OrdersService) { }
 
     public inputNumberValue: any = null;
 
@@ -162,6 +163,8 @@ export class Shoppingcart implements AfterViewInit {
             onApprove: async (data: any) => {
                 this.loading.set(true);
                 try {
+                    const purchasedItems = this.cart();
+                    const total = this.total();
                     const capture = await lastValueFrom(this.paymentService.captureOrder(data.orderID));
 
                     // EXTRAEMOS LA UBICACIÓN DESTINO
@@ -183,7 +186,21 @@ export class Shoppingcart implements AfterViewInit {
                         orderId: data.orderID,
                         status: capture.status || 'COMPLETED'
                     };
-                    
+
+                    const idUser = this.ordersService.getCurrentUserId();
+
+                    if (!idUser) {
+                        this.error.set('Debes iniciar sesión para realizar una compra.');
+                        return;
+                    }
+                    await lastValueFrom(this.ordersService.createOrder({
+                        id_user: idUser,
+                        payment_method: 'Digital wallet',
+                        paypal_status: paypalData.status,
+                        price: total,
+                        products: purchasedItems.map((item) => ({ id_product: item.id, quantity: Number(item.quantity || 1) }))
+                    }));
+
                     // PASAMOS LOS DATOS AL XML                    
                     this.cartService.exportXML(customerData, paypalData);
 

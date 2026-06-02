@@ -38,7 +38,13 @@ export class PaymentService {
   }
 
   createOrder(payload: CreatePaypalOrderPayload): Observable<{ id: string }> {
-    return this.http.post<{ id: string }>(`${this.base}/create-order`, payload);
+    console.log('PAYPAL PAYLOAD');
+    console.log(payload);
+
+    return this.http.post<{ id: string }>(
+      `${this.base}/create-order`,
+      payload
+    );
   }
 
   captureOrder(orderId: string): Observable<any> {
