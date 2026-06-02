@@ -48,7 +48,7 @@ export class Profile {
 
         if (!idUser) {
             this.loading.set(false);
-            this.router.navigate(['/login']);
+            this.router.navigate(['/auth/login']);
             return;
         }
 

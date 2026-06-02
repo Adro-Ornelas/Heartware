@@ -13,6 +13,7 @@ export class OrdersService {
     private base = this.resolveApiBase();
 
     getOrdersByUser(idUser: number): Observable<PurchaseOrder[]> {
+        console.log('Consultando órdenes para:', idUser);
         return this.http.get<PurchaseOrder[]>(`${this.base}/orders/user/${idUser}`).pipe(
             map((orders) =>
                 orders.map((order) => ({

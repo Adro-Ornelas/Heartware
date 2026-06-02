@@ -32,9 +32,12 @@
                                     </span>
                                     <div>
                                         <div class="flex flex-wrap items-center gap-3">
-                                            <h2 class="m-0 text-lg font-semibold text-surface-900 dark:text-surface-0">Orden #{{ order.id_order }}</h2>
+                                            <h2 class="m-0 text-lg font-semibold text-surface-900 dark:text-surface-0">Orden #{{ order.user_order_number }}</h2>
                                             <p-tag [value]="getStateLabel(order.state)" [severity]="getStateSeverity(order.state)"></p-tag>
                                         </div>
+                                        <p class="text-xs text-surface-500">
+                                            ID interno: {{ order.id_order }}
+                                        </p>
                                         <p class="mt-1 text-sm text-surface-500 dark:text-surface-400">
                                             {{ order.date | date: 'dd/MM/yyyy, h:mm a' }} · {{ order.payment_method }}
                                         </p>

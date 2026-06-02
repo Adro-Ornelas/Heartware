@@ -14,8 +14,8 @@ import { CommonModule } from '@angular/common';
     selector: 'app-login',
     standalone: true,
     imports: [
-        CommonModule, ButtonModule, InputTextModule, 
-        PasswordModule, FormsModule, RouterModule, 
+        CommonModule, ButtonModule, InputTextModule,
+        PasswordModule, FormsModule, RouterModule,
         RippleModule, AppFloatingConfigurator, MessageModule
     ],
     template: `
@@ -56,7 +56,7 @@ import { CommonModule } from '@angular/common';
 export class Login {
     email = '';
     password = '';
-    
+
     isLoading = signal(false);
     errorMessage = signal('');
 
@@ -74,7 +74,9 @@ export class Login {
 
         this.authService.login({ email: this.email, password: this.password }).subscribe({
             next: (res) => {
+                console.log(res);
                 this.authService.saveToken(res.token);
+                this.authService.saveUserId(res.user.id_user);
                 // Al estar autenticado, navegamos al catálogo dentro del Shell protegido
                 this.router.navigate(['/pages/catalog']);
             },

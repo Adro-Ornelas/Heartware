@@ -18,88 +18,96 @@ const normalizeState = (paypalStatus) => {
     return 'error';
 };
 
-const getOrdersByUser = (req, res) => {
-    const idUser = Number(req.params.id_user);
+const getOrdersByUser = async (req, res) => {
+    try {
+        const idUser = Number(req.params.id_user);
 
-    if (!Number.isInteger(idUser) || idUser <= 0) {
-        return res.status(400).json({ error: 'Usuario invalido' });
-    }
-
-    const sql = `
-        SELECT
-            o.id_order,
-            o.id_user,
-            o.payment_method,
-            o.state,
-            o.date,
-            o.price,
-
-            o.customer_name,
-            o.street,
-            o.city,
-            o.state_address,
-            o.postal_code,
-            o.country,
-
-            p.id AS product_id,
-            p.name AS product_name,
-            p.price AS product_price,
-            p.image AS product_image,
-            p.category AS product_category,
-            COUNT(p.id) AS product_quantity
-        FROM orders o
-        LEFT JOIN products_orders po ON po.id_order = o.id_order
-        LEFT JOIN products p ON p.id = po.id_product
-        WHERE o.id_user = ?
-        GROUP BY
-            o.id_order,
-            o.id_user,
-            o.payment_method,
-            o.state,
-            o.date,
-            o.price,
-
-            o.customer_name,
-            o.street,
-            o.city,
-            o.state_address,
-            o.postal_code,
-            o.country,
-
-            p.id,
-            p.name,
-            p.price,
-            p.image,
-            p.category
-        ORDER BY o.date DESC
-    `;
-
-    db.query(sql, [idUser], (error, result) => {
-        if (error) {
-            return res.status(500).json({ error: 'Error al obtener el historial de compras' });
+        if (!Number.isInteger(idUser) || idUser <= 0) {
+            return res.status(400).json({
+                error: 'Usuario invalido'
+            });
         }
+
+        const sql = `
+            SELECT
+                o.id_order,
+                o.id_user,
+                o.payment_method,
+                o.state,
+                o.date,
+                o.price,
+
+                o.customer_name,
+                o.street,
+                o.city,
+                o.state_address,
+                o.postal_code,
+                o.country,
+
+                p.id AS product_id,
+                p.name AS product_name,
+                p.price AS product_price,
+                p.image AS product_image,
+                p.category AS product_category,
+                COUNT(p.id) AS product_quantity
+
+            FROM orders o
+
+            LEFT JOIN products_orders po
+                ON po.id_order = o.id_order
+
+            LEFT JOIN products p
+                ON p.id = po.id_product
+
+            WHERE o.id_user = ?
+
+            GROUP BY
+                o.id_order,
+                o.id_user,
+                o.payment_method,
+                o.state,
+                o.date,
+                o.price,
+
+                o.customer_name,
+                o.street,
+                o.city,
+                o.state_address,
+                o.postal_code,
+                o.country,
+
+                p.id,
+                p.name,
+                p.price,
+                p.image,
+                p.category
+
+            ORDER BY o.date DESC
+        `;
+
+        const [result] = await db.query(sql, [idUser]);
 
         const ordersMap = new Map();
 
         result.forEach((row) => {
             if (!ordersMap.has(row.id_order)) {
                 ordersMap.set(row.id_order, {
-                id_order: row.id_order,
-                id_user: row.id_user,
-                payment_method: row.payment_method,
-                state: row.state,
-                date: row.date,
-                price: row.price,
+                    id_order: row.id_order,
+                    id_user: row.id_user,
+                    payment_method: row.payment_method,
+                    state: row.state,
+                    date: row.date,
+                    price: row.price,
 
-                customer_name: row.customer_name,
-                street: row.street,
-                city: row.city,
-                state_address: row.state_address,
-                postal_code: row.postal_code,
-                country: row.country,
+                    customer_name: row.customer_name,
+                    street: row.street,
+                    city: row.city,
+                    state_address: row.state_address,
+                    postal_code: row.postal_code,
+                    country: row.country,
 
-                products: []
-            });
+                    products: []
+                });
             }
 
             if (row.product_id) {
@@ -116,48 +124,45 @@ const getOrdersByUser = (req, res) => {
 
         const orders = Array.from(ordersMap.values());
 
+        orders.forEach((order, index) => {
+            order.user_order_number = index + 1;
+        });
+
         res.json(orders);
-    });
+
+        res.json(orders);
+    } catch (error) {
+        console.error(error);
+
+        res.status(500).json({
+            error: 'Error al obtener historial'
+        });
+    }
 };
 
-const createOrder = (req, res) => {
-    const idUser = Number(req.body.id_user);
-    const paymentMethod = req.body.payment_method || 'Digital wallet';
-    const state = req.body.state || normalizeState(req.body.paypal_status);
-    const price = Number(req.body.price);
-    const products = Array.isArray(req.body.products) ? req.body.products : [];
+const createOrder = async (req, res) => {
+    const connection = await db.getConnection();
 
-    // DATOS DE ENVÍO
-    const customerName = req.body.customer_name || '';
-    const street = req.body.street || '';
-    const city = req.body.city || '';
-    const stateAddress = req.body.state_address || '';
-    const postalCode = req.body.postal_code || '';
-    const country = req.body.country || '';
+    try {
+        const idUser = Number(req.body.id_user);
+        const paymentMethod = req.body.payment_method || 'Digital wallet';
+        const state = req.body.state || normalizeState(req.body.paypal_status);
+        const price = Number(req.body.price);
 
-    if (!Number.isInteger(idUser) || idUser <= 0) {
-        return res.status(400).json({ error: 'Usuario invalido' });
-    }
+        const products = Array.isArray(req.body.products)
+            ? req.body.products
+            : [];
 
-    if (!Number.isFinite(price) || price <= 0) {
-        return res.status(400).json({ error: 'Total invalido' });
-    }
-
-    if (!products.length) {
-        return res.status(400).json({ error: 'La orden debe incluir productos' });
-    }
-
-    const validStates = ['accepted', 'rejected', 'cancelled', 'error'];
-    if (!validStates.includes(state)) {
-        return res.status(400).json({ error: 'Estado de orden invalido' });
-    }
-
-    db.beginTransaction((transactionError) => {
-        if (transactionError) {
-            return res.status(500).json({ error: 'Error al iniciar la orden' });
+        if (!products.length) {
+            return res.status(400).json({
+                error: 'La orden debe incluir productos'
+            });
         }
 
-        const orderSql = `
+        await connection.beginTransaction();
+
+        const [orderResult] = await connection.query(
+            `
             INSERT INTO orders (
                 id_user,
                 payment_method,
@@ -171,63 +176,64 @@ const createOrder = (req, res) => {
                 country
             )
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            `;
-        db.query(
-        orderSql,
+            `,
             [
                 idUser,
                 paymentMethod,
                 state,
                 Math.round(price),
 
-                customerName,
-                street,
-                city,
-                stateAddress,
-                postalCode,
-                country
-            ], (orderError, orderResult) => {
-            if (orderError) {
-                return db.rollback(() => res.status(500).json({ error: 'Error al guardar la orden' }));
+                req.body.customer_name || '',
+                req.body.street || '',
+                req.body.city || '',
+                req.body.state_address || '',
+                req.body.postal_code || '',
+                req.body.country || ''
+            ]
+        );
+
+        const idOrder = orderResult.insertId;
+
+        const rows = [];
+
+        products.forEach((product) => {
+            const idProduct = Number(product.id_product);
+
+            const quantity = Math.max(
+                1,
+                Number(product.quantity) || 1
+            );
+
+            for (let i = 0; i < quantity; i++) {
+                rows.push([idOrder, idProduct]);
             }
-
-            const idOrder = orderResult.insertId;
-            const rows = products.flatMap((product) => {
-                const idProduct = Number(product.id_product ?? product.id);
-                const quantity = Math.max(1, Number(product.quantity) || 1);
-
-                if (!Number.isInteger(idProduct) || idProduct <= 0) {
-                    return [];
-                }
-
-                return Array.from({ length: quantity }, () => [idOrder, idProduct]);
-            });
-
-            if (!rows.length) {
-                return db.rollback(() => res.status(400).json({ error: 'Productos invalidos' }));
-            }
-
-            db.query('INSERT INTO products_orders (id_order, id_product) VALUES ?', [rows], (productsError) => {
-                if (productsError) {
-                    return db.rollback(() => res.status(500).json({ error: 'Error al guardar productos de la orden' }));
-                }
-
-                db.commit((commitError) => {
-                    if (commitError) {
-                        return db.rollback(() => res.status(500).json({ error: 'Error al confirmar la orden' }));
-                    }
-
-                    res.status(201).json({
-                        id_order: idOrder,
-                        id_user: idUser,
-                        payment_method: paymentMethod,
-                        state,
-                        price: Math.round(price)
-                    });
-                });
-            });
         });
-    });
+
+        await connection.query(
+            'INSERT INTO products_orders (id_order, id_product) VALUES ?',
+            [rows]
+        );
+
+        await connection.commit();
+
+        res.status(201).json({
+            id_order: idOrder,
+            id_user: idUser,
+            payment_method: paymentMethod,
+            state,
+            price
+        });
+    } catch (error) {
+        await connection.rollback();
+
+        console.error(error);
+
+        res.status(500).json({
+            error: 'Error al guardar la orden'
+        });
+    } finally {
+        connection.release();
+    }
 };
 
 module.exports = {

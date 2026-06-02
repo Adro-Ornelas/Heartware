@@ -5,6 +5,7 @@ export type OrderState = 'accepted' | 'rejected' | 'cancelled' | 'error';
 export interface PurchaseOrder {
     id_order: number;
     id_user: number;
+    user_order_number?: number;
 
     payment_method: string;
     state: OrderState;

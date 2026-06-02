@@ -53,7 +53,10 @@ const login = async (req, res) => {
         console.log('Generando JWT...');
         // Generar JWT
         const token = jwt.sign(
-            { id: user.id, email: user.email, username: user.username },
+            {
+                id_user: user.id_user,
+                email: user.email
+            },
             process.env.JWT_SECRET,
             { expiresIn: '1h' }
         );
@@ -62,7 +65,13 @@ const login = async (req, res) => {
         // Responder con el token y datos públicos del usuario
         res.json({
             token,
-            user: { id: user.id, username: user.username, email: user.email }
+            user: {
+                id_user: user.id_user,
+                name: user.name,
+                last_name: user.last_name,
+                email: user.email,
+                type: user.type
+            }
         });
     } catch (error) {
         console.error('CRASH EN EL LOGIN:', error);

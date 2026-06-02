@@ -30,6 +30,8 @@ export class PurchaseHistory {
 
         const idUser = this.ordersService.getCurrentUserId();
 
+        console.log('ID Usuario:', idUser);
+
         if (!idUser) {
             this.error.set('Debes iniciar sesión.');
             this.loading.set(false);
@@ -38,10 +40,14 @@ export class PurchaseHistory {
 
         this.ordersService.getOrdersByUser(idUser).subscribe({
             next: (orders) => {
+                console.log('Órdenes recibidas:', orders);
+
                 this.orders.set(orders);
                 this.loading.set(false);
             },
-            error: () => {
+            error: (err) => {
+                console.error('Error al cargar órdenes:', err);
+
                 this.error.set('No se pudo cargar tu historial de compras.');
                 this.loading.set(false);
             }

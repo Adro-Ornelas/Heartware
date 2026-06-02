@@ -16,7 +16,7 @@ export class UsersService {
         const storedUserId =
             localStorage.getItem('id_user') ||
             localStorage.getItem('userId');
-
+        
         const idUser = Number(storedUserId);
 
         return Number.isInteger(idUser) && idUser > 0
@@ -58,7 +58,7 @@ export class UsersService {
         // localStorage.removeItem('token');
         // localStorage.removeItem('user');
 
-        this.router.navigate(['/login']);
+        this.router.navigate(['/auth/login']);
     }
 
     isLoggedIn(): boolean {
