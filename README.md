@@ -133,6 +133,25 @@ ng serve
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
+## sakai-ng
+
+This e-commerce webapp is based on sakai-ng open template & components, for someone interested in use this template the steps to install it are:
+
+1. Clone sakai-ng
+```bash
+git clone https://github.com/primefaces/sakai-ng.git
+```
+2. Go to assets in sakai and clone subrepository
+```bash
+cd src/assets/
+git clone https://github.com/cetincakiroglu/sakai-assets.git
+cd ..
+```
+3. Install dependencies
+```bash
+npm install
+```
+
 ## Developers
 
 | Name                       | Description                    |
