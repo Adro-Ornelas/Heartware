@@ -1,13 +1,75 @@
 # HEARTWARE
 
+![PayPal](https://img.shields.io/badge/PayPal-Payment-blue)
+![Node.js](https://img.shields.io/badge/Node.js-Backend-yellow)
+![PrimeNG](https://img.shields.io/badge/PrimeNG-Angular-red)
+![MySQL](https://img.shields.io/badge/MySQL-Database-purple)
+
+E-Commerce WebApp based on Angular (PrimeNG), with PayPal payment handling
+
+## Demo
+
+### Product catalog
+![Catalog](docs/images/capture_catalog.png)
+
+### Shopping cart
+![Shopping Cart](docs/images/capture_shopping_cart.png)
+
+### Payment via PayPal
+![Payment](docs/images/capture_payment.png)
+
+## Repository Structure
+```text
+Heartware
+├── backend (Node.js server)
+│   ├── public ()
+├── docs 
+│   ├── core
+│   ├── diagrams
+│   ├── hardware
+│   └── screenshots
+├── firmware
+│   ├── android-HMI (Android Native app)
+│   └── esp32cam (embedded C/C++)
+└── mobile (Flutter apps)
+    ├── admin
+    ├── collection-center
+    ├── collector
+    ├── participant
+    └── store
+```
+
+## Features
+
+- Product management (CRUD)
+- Users registration
+- Ticket export in XML (CFDI 4.0)
+- Shopping Cart
+- Payment via PayPal
+
+## Installation
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.
 
-## Development server
-
-To start a local development server, run:
+1. Clone repo and install node modules both in frontend and backend:
 
 ```bash
-ng serve
+git clone https://github.com/Adotal/Heartware.git
+cd Heartware
+npm install
+cd backend
+npm install
+cd ..
+```
+
+2. Export db from sql/heartware.sql to any local LAMPP setup
+3. Create .env in backend/ based on .env.example
+4. Start a local server/frontend/database:
+
+Using custom script to start database, backend and frontend sequentially:
+
+```bash
+./init.sh
 ```
 
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
@@ -57,3 +119,9 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+## Developers
+| Name                       | Description                    |
+| :------------------------- | :----------------------------- |
+| Adro Yael Ornelas Ornelas  | https://github.com/Adotal      |
+| Adrián Kosey Angeles Ramos | https://github.com/AdrianKosey |
