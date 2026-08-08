@@ -5,9 +5,17 @@
 ![PrimeNG](https://img.shields.io/badge/PrimeNG-Angular-red)
 ![MySQL](https://img.shields.io/badge/MySQL-Database-purple)
 
-E-Commerce WebApp based on Angular (PrimeNG), with PayPal payment handling
+A modern full-stack e-commerce web platform built with Angular 21, PrimeNG, Node.js, Express, and MySQL, featuring integrated PayPal checkout and CFDI 4.0 XML invoicing.
 
-## Demo
+## Features
+
+- Product Management (CRUD): Complete administration panel for creating, updating, listing, and deleting products with automated image upload support.
+- Shopping Cart & Checkout: Responsive, interactive cart management powered by PrimeNG components.
+- PayPal Integration: Payment processing via PayPal API.
+- CFDI 4.0 Tax Invoicing: Automatic invoice and ticket export in XML format complying with CFDI 4.0 standards.
+- User & Role Management: Portal designed for multiple user profiles (Admin, Store, Collection Center, Collector, Participant).
+
+## Demo Screenshots
 
 ### Product catalog
 ![Catalog](docs/images/capture_catalog.png)
@@ -18,20 +26,28 @@ E-Commerce WebApp based on Angular (PrimeNG), with PayPal payment handling
 ### Payment via PayPal
 ![Payment](docs/images/capture_payment.png)
 
+
+## Architecture & Diagrams
+
+Entity-Relationship Diagram
+
+![ERD](docs/images/diagram_der.png)
+
+Navigation tree
+
+![Navigation tree](docs/images/diagram_nav_tree.png)
+
 ## Repository Structure
 ```text
 Heartware
 ├── backend (Node.js server)
-│   ├── public ()
+│   ├── public (assets)
+│   └── src (source code)
 ├── docs 
-│   ├── core
-│   ├── diagrams
-│   ├── hardware
-│   └── screenshots
-├── firmware
-│   ├── android-HMI (Android Native app)
-│   └── esp32cam (embedded C/C++)
-└── mobile (Flutter apps)
+├── sql 
+│   └── heartware.sql (SQL database scheme)
+├── src (frontend source code)
+└── public (frontend assets)
     ├── admin
     ├── collection-center
     ├── collector
@@ -39,88 +55,86 @@ Heartware
     └── store
 ```
 
-## Features
+## Getting started
 
-- Product management (CRUD)
-- Users registration
-- Ticket export in XML (CFDI 4.0)
-- Shopping Cart
-- Payment via PayPal
+### Prerequisites
 
-## Installation
+Ensure you have the following software installed:
+  - Node.js: v18.x or v20.x higher
+  - npm: v9.x or higher
+  - Angular CLI: v21.x (npm install -g @angular/cli)
+  - MySQL / LAMPP / XAMPP: For local database hosting
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.
+### Installation
 
-1. Clone repo and install node modules both in frontend and backend:
+1. Clone the repository
 
 ```bash
 git clone https://github.com/Adotal/Heartware.git
 cd Heartware
+```
+
+2. Install frontend dependencies
+
+```bash
 npm install
+```
+
+3. Install backend dependencies
+
+```bash
 cd backend
 npm install
 cd ..
 ```
 
-2. Export db from sql/heartware.sql to any local LAMPP setup
-3. Create .env in backend/ based on .env.example
-4. Start a local server/frontend/database:
+### Database & Envrionment setup
 
-Using custom script to start database, backend and frontend sequentially:
+1. Database import
+   
+ - Start your MySQL server (via XAMPP/LAMPP or standalone).
+ - Create a database (heartware).
+ - Import the database schema from sql/heartware.sql:
+
+```bash
+mysql -u root -p heartware < sql/heartware.sql
+```
+
+2. Create a .env file inside the backend/ directory based on .env.example
+
+
+## Running application
+
+### Option A: Automated script
+
+Use the provided shell script to start the backend and frontend simultaneously:
 
 ```bash
 ./init.sh
 ```
 
+
+### Option B: Manual setup
+
+1. Start the Express API Server:
+
+```bash
+cd backend
+npm start
+```
+
+2. Start the Angular Frontend:
+
+```bash
+ng serve
+```
+
+### Application on localhost 
+
 Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
-
 ## Developers
+
 | Name                       | Description                    |
 | :------------------------- | :----------------------------- |
 | Adro Yael Ornelas Ornelas  | https://github.com/Adotal      |
